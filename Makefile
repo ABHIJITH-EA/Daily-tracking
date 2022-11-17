@@ -1,5 +1,5 @@
 run:
-	python3 ./src/app.py
+	python3 src/app.py
 
 setup:
 	pip install -r requirements.txt
