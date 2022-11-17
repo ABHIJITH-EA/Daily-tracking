@@ -1,0 +1,1 @@
+- Remove blank files from **resources** directory
