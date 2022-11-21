@@ -1,3 +1,4 @@
 docs/design
 setup.sh
+data/application.log
 **/__pycache__/
