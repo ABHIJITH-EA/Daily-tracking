@@ -1,5 +1,11 @@
 import os
 
+try:
+    import tomlib
+except ModuleNotFoundError:
+    import tomli as tomlib
+
+
 ENTRY_DIR = os.path.dirname(__file__)
 BASE_DIR = os.path.dirname(ENTRY_DIR)
 
