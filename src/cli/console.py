@@ -1,4 +1,7 @@
 """ Console window for the cli """
 
+from cli import utils
+
+
 def welcome():
-    print("Welcome")
+    utils.banner()

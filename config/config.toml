@@ -1,4 +1,8 @@
 # Global configuartion
 
+[author]
+name = "Abhijith E A"
+email = "abhijithea3773@gmail.com"
+
 [datbases]
 port = 3306
