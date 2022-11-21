@@ -1,0 +1,6 @@
+Testing
+Executed
+2022-11-21 14:47:48 31091 /media/Disk1/MyDisk/Python/Project/unnamed/src/app.py 731 20
+2022-11-21 14:49:03 31198 /media/Disk1/MyDisk/Python/Project/unnamed/src/app.py 670 INFO Started
+2022-11-21 15:03:28 32462 /media/Disk1/MyDisk/Python/Project/unnamed/src/app.py 104 INFO Test 1
+2022-11-21 15:04:52 32615 /media/Disk1/MyDisk/Python/Project/unnamed/src/app.py 603 WARNING Test 03
