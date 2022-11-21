@@ -1,0 +1,4 @@
+# Global configuartion
+
+[datbases]
+port = 3306
