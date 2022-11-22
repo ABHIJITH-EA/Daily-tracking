@@ -7,12 +7,16 @@ def parse_config(key: str) -> dict | None:
     try:
         return config_data[key]
     except KeyError:
-        return {'name': ''}
+        pass
 
 
 def get_author():
     author = parse_config('author')
     return author['name']
+
+def get_app_menu():
+    menu = parse_config('menu')
+    return menu['application']
 
 
 def banner() -> None:
@@ -29,3 +33,15 @@ def banner() -> None:
     print(f' Version  {version.__version__}                       ')
     print(f' Coded by {get_author()}                              ')
     print('                                                       ')
+
+
+# TODO: Fix manual `print sizing`
+#       make a function to do it
+def application_menu():
+    print('                                                       ')
+    print('                                                       ')
+    print('                                                       ')
+    
+    menu_list = get_app_menu()
+    for menu in menu_list:
+        print(f' [*] {menu}')
