@@ -1,7 +1,7 @@
 """ Console window for the cli """
 
-from cli import utils
+from cli import core
 
 
 def welcome():
-    utils.banner()
+    core.banner()

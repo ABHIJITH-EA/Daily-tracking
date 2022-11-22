@@ -1,4 +1,18 @@
 import version
+from utils import get_yaml_config
+
+
+def parse_config(key: str) -> dict | None:
+    config_data = get_yaml_config('cli.yaml')
+    try:
+        return config_data[key]
+    except KeyError:
+        return {'name': ''}
+
+
+def get_author():
+    author = parse_config('author')
+    return author['name']
 
 
 def banner() -> None:
@@ -12,6 +26,6 @@ def banner() -> None:
     print(' /_/\_\/_/\_\/_/\_\____/|_| |_|\__,_|_| |_|\__, |\___| ')
     print('                                            |___/      ')
     print('                                                       ')
-    print(f' Version {version.__version__}                        ')
-    print(f' Coded by                                             ')
+    print(f' Version  {version.__version__}                       ')
+    print(f' Coded by {get_author()}                              ')
     print('                                                       ')
