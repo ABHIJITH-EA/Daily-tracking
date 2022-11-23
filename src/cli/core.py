@@ -1,22 +1,26 @@
 import version
 from utils import get_yaml_config, parse_config_file
-
+from logger import logger
 
 def parse_config(key: str) -> dict | None:
     config_data = get_yaml_config('cli.yaml')
     try:
         return config_data[key]
     except KeyError:
-        pass
+        logger.warning(f'{key} not found in the config file')
 
 
-def get_author():
-    author = parse_config('author')
-    return author['name']
+def get_author() -> str:
+    author = parse_config('athor')
+    if author is not None:
+        return author['name']
+    return ''
 
-def get_app_menu():
+def get_app_menu() -> str:
     menu = parse_config('menu')
-    return menu['application']
+    if menu is not None:
+        return menu['application']
+    return ''
 
 
 def banner() -> None:
@@ -37,7 +41,7 @@ def banner() -> None:
 
 # TODO: Fix manual `print sizing`
 #       make a function to do it
-def application_menu():
+def application_menu() -> None:
     print('                                                       ')
     print('                                                       ')
     print('                                                       ')
