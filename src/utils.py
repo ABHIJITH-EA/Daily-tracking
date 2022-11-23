@@ -17,7 +17,6 @@ def get_config_file(filename: str) -> str | None:
     filepath = os.path.join(config.CONFIG_DIR, filename)
     if os.path.exists(filepath):
         return filepath
-    # return os.path.join(config.CONFIG_DIR, filename)
 
 
 def get_yaml_config(filename: str, dir: str = config.CONFIG_DIR) -> None | str:
