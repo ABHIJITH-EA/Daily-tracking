@@ -1,5 +1,5 @@
 import version
-from utils import get_yaml_config
+from utils import get_yaml_config, parse_config_file
 
 
 def parse_config(key: str) -> dict | None:
@@ -45,3 +45,6 @@ def application_menu():
     menu_list = get_app_menu()
     for menu in menu_list:
         print(f' [*] {menu}')
+    
+    print('                                                       ')
+    print('                                                       ')
