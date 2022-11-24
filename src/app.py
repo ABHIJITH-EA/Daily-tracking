@@ -5,4 +5,4 @@ from cli import console
 # Initialzie logger
 config_logger()
 
-console.welcome()
+console.init()

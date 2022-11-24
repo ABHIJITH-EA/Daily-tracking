@@ -7,11 +7,11 @@ def parse_config(key: str) -> dict | None:
     try:
         return config_data[key]
     except KeyError:
-        logger.warning(f'{key} not found in the config file')
+        logger.info(f'{key} not found in the config file')
 
 
 def get_author() -> str:
-    author = parse_config('athor')
+    author = parse_config('author')
     if author is not None:
         return author['name']
     return ''
