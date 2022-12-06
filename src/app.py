@@ -1,8 +1,10 @@
 from logger import logger, config_logger
 from cli import console
+from handlers import init_handlers
 
 
-# Initialzie logger
 config_logger()
+init_handlers()
 
-console.init()
+if __name__ == '__main__':
+    console.init()
