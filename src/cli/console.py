@@ -3,14 +3,14 @@
 from cli import core
 from base.constants import Activity, General
 from logger import logger
-
+from api import daily_tracking, budgeting
 
 def repl():
     while True:
         try:
             user_input = int(input(' XXXChange ==> '))
             match user_input:
-                case Activity.DAILYTRACKING:
+                case Activity.DAILY_TRACKING:
                     pass
                 case Activity.BUDGETING:
                     pass

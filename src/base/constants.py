@@ -5,7 +5,7 @@ from enum import IntEnum, unique
 
 @unique
 class Activity(IntEnum):
-    DAILYTRACKING = 1
+    DAILY_TRACKING = 1
     BUDGETING = 2
 
 
