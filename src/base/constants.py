@@ -1,6 +1,6 @@
 """ Core constants """
 
-from enum import IntEnum, unique
+from enum import Enum, IntEnum, unique
 
 
 @unique
@@ -12,3 +12,8 @@ class Activity(IntEnum):
 @unique
 class General(IntEnum):
     EXIT = 0
+
+
+class System(Enum):
+    APP_NAME = ' XXXChange ==> '
+    LOGGER_NAME = 'XXXChange'

@@ -1,7 +1,8 @@
 import logging
 import utils
+from base.constants import System
 
-logger = logging.getLogger('XXXChange')
+logger = logging.getLogger(System.LOGGER_NAME.value)
 
 
 def config_logger(filename: str = 'application.log', level: int = 10) -> None:
