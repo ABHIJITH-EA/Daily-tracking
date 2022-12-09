@@ -17,3 +17,4 @@ class General(IntEnum):
 class System(Enum):
     APP_NAME = ' XXXChange ==> '
     LOGGER_NAME = 'XXXChange'
+    SECONDARY_LEFT_ALIGN = len(APP_NAME)
