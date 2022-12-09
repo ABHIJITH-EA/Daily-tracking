@@ -2,6 +2,7 @@ import version
 from utils import get_yaml_config, parse_config_file
 from logger import logger
 
+
 def parse_config(key: str) -> dict | None:
     config_data = get_yaml_config('cli.yaml')
     try:
@@ -16,6 +17,7 @@ def get_author() -> str:
         return author['name']
     return ''
 
+
 def get_app_menu() -> str:
     menu = parse_config('menu')
     if menu is not None:
@@ -26,7 +28,7 @@ def get_app_menu() -> str:
 def banner() -> None:
     print('                                                       ')
     print('                                                       ')
-    print('                                                       ')    
+    print('                                                       ')
     print(' __  ____  ____  __  ___ _                             ')
     print(' \ \/ /\ \/ /\ \/ / / __\ |__   __ _ _ __   __ _  ___  ')
     print("  \  /  \  /  \  / / /  | '_ \ / _` | '_ \ / _` |/ _ \ ")
@@ -45,10 +47,15 @@ def application_menu() -> None:
     print('                                                       ')
     print('                                                       ')
     print('                                                       ')
-    
+
     menu_list = get_app_menu()
     for menu in menu_list:
         print(f' [*] {menu}')
-    
+
     print('                                                       ')
     print('                                                       ')
+
+
+# Debugger for the cli system
+def debugger():
+    pass

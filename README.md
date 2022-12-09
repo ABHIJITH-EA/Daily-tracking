@@ -1,6 +1,6 @@
 # General
 - Remove blank files from **resources** directory
-
+- Remove debugger from `cli core`
 
 ### Development
 ---

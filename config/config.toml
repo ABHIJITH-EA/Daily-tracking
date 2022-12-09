@@ -4,7 +4,11 @@
 name = "Abhijith E A"
 email = "abhijithea3773@gmail.com"
 
-[database]
+[database.mysql]
 user = "root"
 host = "127.0.0.1"
 port = 3306
+
+[database.sqlite]
+user = ''
+host = ''

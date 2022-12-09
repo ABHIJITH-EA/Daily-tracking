@@ -27,3 +27,5 @@ def init():
     core.application_menu()
 
     repl()
+
+    # core.debugger()
