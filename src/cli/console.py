@@ -7,7 +7,8 @@ from cli import core, utils
 from base.constants import Activity, General, System
 from logger import logger
 from api import daily_tracking, budget_tracking
-
+from api.validations.daily_tracking import DailyTrackingValidation
+from api.validations.budget_tracking import BudgetTrackingValidation
 
 def log_message(msg: str):
     log_time = time.strftime('%H:%M:%S')
@@ -49,11 +50,14 @@ def daily_tracking_menu() -> list:
     menu_header('Daily tracking')
     wakeup_time = menu_read_input('wake up time? ')
     sleepy_time = menu_read_input('time went to sleep? ')
-    log_message('')
+
+    DailyTrackingValidation.wakeup_time(wakeup_time)
+    DailyTrackingValidation.sleepy_time(sleepy_time)
 
     user_data.append(wakeup_time)
     user_data.append(sleepy_time)
 
+    log_message('')
     return user_data
 
 
