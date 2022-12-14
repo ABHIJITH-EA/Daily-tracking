@@ -45,14 +45,19 @@ def menu_info(text: str) -> None:
     pass
 
 
-def daily_tracking_menu() -> list:
+def daily_tracking_menu() -> list | None:
     user_data = []
     menu_header('Daily tracking')
     wakeup_time = menu_read_input('wake up time? ')
     sleepy_time = menu_read_input('time went to sleep? ')
 
-    DailyTrackingValidation.wakeup_time(wakeup_time)
-    DailyTrackingValidation.sleepy_time(sleepy_time)
+    if DailyTrackingValidation.wakeup_time(wakeup_time) == False:
+        log_message('Invalid wake up time')
+        return None
+
+    if DailyTrackingValidation.sleepy_time(sleepy_time) == False:
+        log_message('Invalid sleepy up time')
+        return None
 
     user_data.append(wakeup_time)
     user_data.append(sleepy_time)
@@ -61,7 +66,7 @@ def daily_tracking_menu() -> list:
     return user_data
 
 
-def budget_tracking_menu() -> list:
+def budget_tracking_menu() -> list | None:
     pass
 
 
@@ -72,8 +77,12 @@ def repl():
             match user_input:
                 case Activity.DAILY_TRACKING:
                     data = daily_tracking_menu()
+                    if data is None:
+                        pass
                 case Activity.BUDGETING:
                     data = budget_tracking_menu()
+                    if data is None:
+                        pass
                 case General.EXIT:
                     log_message('EXITING')
                     sys.exit(0)
