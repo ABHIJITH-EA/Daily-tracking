@@ -3,7 +3,7 @@
 import sys
 import time
 from datetime import date
-from cli import core
+from cli import core, utils
 from base.constants import Activity, General, System
 from logger import logger
 from api import daily_tracking, budget_tracking
@@ -17,29 +17,43 @@ def log_message(msg: str):
 
 
 def menu_printer(text: str) -> None:
-    align_size = System.SECONDARY_LEFT_ALIGN.value \
-                + System.CONSOLE_MENU_ALIGN_SIZE.value
-    if len(text) > align_size:
-        align_size = len(text) \
-                    + System.CONSOLE_MENU_ALIGN_SIZE.value
+    align_size = utils.aligner(text)
     print(f'{text}'.rjust(align_size))
 
 
-def menu_header(header: str):
+def menu_header(header: str) -> None:
     today = date.today()
     day = date(today.year, today.month, today.day)
     tracking_date = day.strftime('%A %d %B %Y')
-    lines = '-'*len(header)
+    lines = '-' * len(header)
     menu_printer(header)
     menu_printer(lines)
     menu_printer(tracking_date)
 
 
-def daily_tracking_menu():
+def menu_read_input(text: str) -> str:
+    align_size = utils.aligner(text)
+    data = input(text.rjust(align_size))
+
+    return data
+
+
+def menu_info(text: str) -> None:
+    pass
+
+
+def daily_tracking_menu() -> list:
+    user_data = []
     menu_header('Daily tracking')
-    menu_printer('wake up time? ')
-    menu_printer('time went to sleep? ')
-    log_message('ACTIVITY RECORDED AT (0.03 sec)')
+    wakeup_time = menu_read_input('wake up time? ')
+    sleepy_time = menu_read_input('time went to sleep? ')
+    log_message('')
+
+    user_data.append(wakeup_time)
+    user_data.append(sleepy_time)
+
+    return user_data
+
 
 def budget_tracking_menu():
     pass

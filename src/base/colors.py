@@ -3,7 +3,7 @@
 from logger import logger
 
 class _Color:
-    default = '0xffffff'
+    default = '0xFFFFFF'
     def __init__(self, value: tuple):
         self.rgb = value
 
