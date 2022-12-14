@@ -19,7 +19,7 @@ CREATE TABLE `daily_tracking`
 );
 
 -- Table for buggeting
-CREATE TABLE `budgeting`
+CREATE TABLE `budget_tracking`
 (
     `id` SERIAL COMMENT 'ID',
     `day` DATE NOT NULL COMMENT 'Date',
@@ -45,7 +45,7 @@ CREATE TABLE `spent`
     `deleated_at` DATETIME NOT NULL,
     `deleated_by` VARCHAR(45) DEFAULT 'system',
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`budgeting_id`) REFERENCES `budgeting`(`id`)
+    FOREIGN KEY (`budgeting_id`) REFERENCES `budget_tracking`(`id`)
 );
 
 CREATE TABLE `income`
@@ -61,5 +61,5 @@ CREATE TABLE `income`
     `deleated_at` DATETIME NOT NULL,
     `deleated_by` VARCHAR(45) DEFAULT 'system',
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`budgeting_id`) REFERENCES `budgeting`(`id`)
+    FOREIGN KEY (`budgeting_id`) REFERENCES `budget_tracking`(`id`)
 );

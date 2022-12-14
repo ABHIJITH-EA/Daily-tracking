@@ -1,10 +1,11 @@
 """ Console window for the cli """
 
+import sys
+import time
 from cli import core
 from base.constants import Activity, General, System
 from logger import logger
-from api import daily_tracking, budgeting
-import time
+from api import daily_tracking, budget_tracking
 
 def log_message(msg: str):
     log_time = time.strftime('%H:%M:%S')
@@ -13,17 +14,26 @@ def log_message(msg: str):
     print(log_text.rjust(0))
 
 
+def daily_tracking_menu():
+    pass
+
+
+def budget_tracking_menu():
+    pass
+
+
 def repl():
     while True:
         try:
             user_input = int(input(System.APP_NAME.value))
             match user_input:
                 case Activity.DAILY_TRACKING:
-                    log_message('Activity created')
+                    daily_tracking_menu()
                 case Activity.BUDGETING:
-                    pass
+                    budget_tracking_menu()
                 case General.EXIT:
-                    pass
+                    log_message('EXITING')
+                    sys.exit(0)
                 case _:
                     pass
         except ValueError as e:

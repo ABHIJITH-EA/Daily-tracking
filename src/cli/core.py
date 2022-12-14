@@ -11,6 +11,8 @@ def parse_config(key: str) -> dict | None:
         logger.info(f'{key} not found in the config file')
 
 
+# TODO: it's a bad implementation not logical
+# to get the author from config file.
 def get_author() -> str:
     author = parse_config('author')
     if author is not None:
