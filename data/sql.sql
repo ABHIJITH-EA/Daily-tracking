@@ -7,7 +7,7 @@ CREATE TABLE `daily_tracking`
 (
     `id` SERIAL COMMENT 'ID',
     `day` DATE NOT NULL COMMENT 'Date',
-    `wakeup_time` TIME NOT NULL DEFAULT COMMENT 'The time wake up',
+    `wakeup_time` TIME NOT NULL DEFAULT COMMENT 'The time got up in the morning',
     `sleepy_time` TIME NOT NULL COMMENT 'The time went to sleep',
     `created_at` DATETIME NOT NULL,
     `created_by` VARCHAR(45) DEFAULT 'system',

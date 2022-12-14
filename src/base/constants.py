@@ -15,6 +15,7 @@ class General(IntEnum):
 
 
 class System(Enum):
-    APP_NAME = ' XXXChange ==> '
+    APP_NAME = 'XXXChange ==> '
     LOGGER_NAME = 'XXXChange'
     SECONDARY_LEFT_ALIGN = len(APP_NAME)
+    CONSOLE_MENU_ALIGN_SIZE = 3

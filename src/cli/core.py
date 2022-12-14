@@ -60,4 +60,5 @@ def application_menu() -> None:
 
 # Debugger for the cli system
 def debugger():
-    pass
+    from cli import config
+    config.get_header()
