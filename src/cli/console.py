@@ -16,9 +16,11 @@ def log_message(msg: str):
     print(log_text.rjust(0))
 
 
-def menu_printer(text: str) -> None:
+def menu_printer(text: str, new_line=False) -> None:
     align_size = utils.aligner(text)
     print(f'{text}'.rjust(align_size))
+    if new_line:
+        print() 
 
 
 def menu_header(header: str) -> None:
@@ -27,7 +29,7 @@ def menu_header(header: str) -> None:
     tracking_date = day.strftime('%A %d %B %Y')
     lines = '-' * len(header)
     menu_printer(header)
-    menu_printer(lines)
+    menu_printer(lines, True)
     menu_printer(tracking_date)
 
 
@@ -55,7 +57,7 @@ def daily_tracking_menu() -> list:
     return user_data
 
 
-def budget_tracking_menu():
+def budget_tracking_menu() -> list:
     pass
 
 
@@ -65,9 +67,9 @@ def repl():
             user_input = int(input(System.APP_NAME.value))
             match user_input:
                 case Activity.DAILY_TRACKING:
-                    daily_tracking_menu()
+                    data = daily_tracking_menu()
                 case Activity.BUDGETING:
-                    budget_tracking_menu()
+                    data = budget_tracking_menu()
                 case General.EXIT:
                     log_message('EXITING')
                     sys.exit(0)
