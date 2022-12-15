@@ -10,9 +10,10 @@ from api import daily_tracking, budget_tracking
 from api.validations.daily_tracking import DailyTrackingValidation
 from api.validations.budget_tracking import BudgetTrackingValidation
 
-def log_message(msg: str):
+# TODO: Fix level ambiguity
+def log_message(msg: str, level = 'INFO'):
     log_time = time.strftime('%H:%M:%S')
-    log_text = f'[{log_time}] [INFO] {msg}'
+    log_text = f'[{log_time}] [{level}] {msg}'
     align_length = len(log_text) + System.SECONDARY_LEFT_ALIGN.value
     print(log_text.rjust(0))
 
@@ -51,12 +52,12 @@ def daily_tracking_menu() -> list | None:
     wakeup_time = menu_read_input('wake up time? ')
     sleepy_time = menu_read_input('time went to sleep? ')
 
-    if DailyTrackingValidation.wakeup_time(wakeup_time) == False:
-        log_message('Invalid wake up time')
+    if DailyTrackingValidation.ispropertime(wakeup_time) == False:
+        log_message('Invalid wake up time', level='ERROR')
         return None
 
-    if DailyTrackingValidation.sleepy_time(sleepy_time) == False:
-        log_message('Invalid sleepy up time')
+    if DailyTrackingValidation.ispropertime(sleepy_time) == False:
+        log_message('Invalid sleepy up time', level='ERROR')
         return None
 
     user_data.append(wakeup_time)
@@ -78,11 +79,11 @@ def repl():
                 case Activity.DAILY_TRACKING:
                     data = daily_tracking_menu()
                     if data is None:
-                        pass
+                        log_message('Failed to upload data')
                 case Activity.BUDGETING:
                     data = budget_tracking_menu()
                     if data is None:
-                        pass
+                        log_message('Failed to upload data')
                 case General.EXIT:
                     log_message('EXITING')
                     sys.exit(0)

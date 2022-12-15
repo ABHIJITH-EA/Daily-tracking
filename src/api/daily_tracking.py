@@ -5,10 +5,7 @@ class DailyTracking:
     def __init__(self):
         pass
 
-    def save_wakeup_time(self) -> None:
-        pass
-
-    def save_sleepy_time(self) -> None:
+    def save_tracking_data(self) -> None:
         pass
 
     def update_wakeup_time(self) -> None:
