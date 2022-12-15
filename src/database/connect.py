@@ -1,7 +1,7 @@
 """ Connect to the database driver """
 
 
-class DatabaseDriver(object):
+class _DatabaseDriver(object):
     _dbinstance = None
 
     def __new__(cls):
@@ -11,4 +11,4 @@ class DatabaseDriver(object):
 
 
 def connect(driver: str = 'mysql'):
-    return DatabaseDriver()
+    return _DatabaseDriver()

@@ -6,9 +6,9 @@ from datetime import date
 from cli import core, utils
 from base.constants import Activity, General, System
 from logger import logger
-from api import daily_tracking, budget_tracking
 from api.validations.daily_tracking import DailyTrackingValidation
 from api.validations.budget_tracking import BudgetTrackingValidation
+import pool
 
 # TODO: Fix level ambiguity
 def log_message(msg: str, level = 'INFO'):
@@ -63,7 +63,7 @@ def daily_tracking_menu() -> list | None:
     user_data.append(wakeup_time)
     user_data.append(sleepy_time)
 
-    log_message('')
+    log_message('Data uploaded successfully')
     return user_data
 
 
@@ -80,10 +80,14 @@ def repl():
                     data = daily_tracking_menu()
                     if data is None:
                         log_message('Failed to upload data')
+                    else:
+                        pool.daily_tracking_api.save_tracking_data(data)
                 case Activity.BUDGETING:
                     data = budget_tracking_menu()
                     if data is None:
                         log_message('Failed to upload data')
+                    else:
+                        pass
                 case General.EXIT:
                     log_message('EXITING')
                     sys.exit(0)
@@ -96,6 +100,9 @@ def repl():
 def init():
     core.banner()
     core.application_menu()
+
+    if pool.check_status() is False:
+        logger.warn('API connections not active')
 
     repl()
 
