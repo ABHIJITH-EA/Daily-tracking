@@ -62,4 +62,4 @@ def application_menu() -> None:
 def debugger():
     from database.connector import connect
 
-    connect()
+    connect(driver='sqlite3')

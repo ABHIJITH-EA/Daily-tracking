@@ -63,7 +63,6 @@ def daily_tracking_menu() -> list | None:
     user_data.append(wakeup_time)
     user_data.append(sleepy_time)
 
-    log_message('Data uploaded successfully')
     return user_data
 
 
@@ -82,6 +81,8 @@ def repl():
                         log_message('Failed to upload data')
                     else:
                         pool.daily_tracking_api.save_tracking_data(data)
+                        log_message('Data uploaded successfully')
+                        logger.info('Daily activity saved')
                 case Activity.BUDGETING:
                     data = budget_tracking_menu()
                     if data is None:
@@ -104,6 +105,6 @@ def init():
     if pool.check_status() is False:
         logger.warn('API connections not active')
 
-    # repl()
+    repl()
 
-    core.debugger()
+    # core.debugger()
