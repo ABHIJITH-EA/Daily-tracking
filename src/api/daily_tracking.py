@@ -1,12 +1,9 @@
 """ API for daily tracking activties """
 
-from database.connect import connect
-
 class DailyTracking:
     
     def __init__(self):
-        mysql_db = connect('mysql')
-        sqlite_db = connect('sqlite')
+        pass
 
     def save_tracking_data(self, data:list) -> None:
         pass

@@ -60,5 +60,6 @@ def application_menu() -> None:
 
 # Debugger for the cli system
 def debugger():
-    from cli import config
-    config.get_header()
+    from database.connector import connect
+
+    connect()

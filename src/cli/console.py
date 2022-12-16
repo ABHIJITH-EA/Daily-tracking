@@ -104,6 +104,6 @@ def init():
     if pool.check_status() is False:
         logger.warn('API connections not active')
 
-    repl()
+    # repl()
 
-    # core.debugger()
+    core.debugger()
