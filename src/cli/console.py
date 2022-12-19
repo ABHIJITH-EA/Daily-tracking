@@ -10,7 +10,7 @@ from api.validations.daily_tracking import DailyTrackingValidation
 from api.validations.budget_tracking import BudgetTrackingValidation
 import pool
 
-# TODO: Fix level ambiguity
+# TODO: Fix level ambiguity eg: `INFO` verbose
 def log_message(msg: str, level = 'INFO'):
     log_time = time.strftime('%H:%M:%S')
     log_text = f'[{log_time}] [{level}] {msg}'
