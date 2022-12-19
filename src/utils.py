@@ -35,3 +35,17 @@ def parse_config_file(key: str) -> dict | None:
                 return config_data[key]
             except KeyError:
                 pass
+
+# TODO: what happens if there is no sql file
+def read_sql_file(filename: str = 'sql.sql', dir: str = config.DATA_DIR) -> list:
+    sql_file = os.path.join(dir, filename)
+
+    try:
+        with open(sql_file, 'r') as f:
+            data = f.read()
+    except FileNotFoundError:
+        pass
+
+    sql_commands = data.split(';')
+
+    return sql_commands

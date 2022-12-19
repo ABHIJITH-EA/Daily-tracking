@@ -60,6 +60,13 @@ def application_menu() -> None:
 
 # Debugger for the cli system
 def debugger():
-    print(parse_config_file('database')['mysql'])
+    import config
+    import os
+    path = os.path.join(config.DATA_DIR, 'sql.sql')
+    with open(path, 'r') as f:
+        data = f.read()
+
+    for i in data.split(';'):
+        print(f'{i}\n')
 
 

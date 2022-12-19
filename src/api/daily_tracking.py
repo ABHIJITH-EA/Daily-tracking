@@ -5,8 +5,7 @@ from database import connector
 class DailyTracking:
     
     def __init__(self):
-        # connector.connect(driver='mysql')
-        pass
+        self.connect = connector.connect(driver='mysql')
 
     def save_tracking_data(self, data:list) -> None:
         pass
