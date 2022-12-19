@@ -60,6 +60,6 @@ def application_menu() -> None:
 
 # Debugger for the cli system
 def debugger():
-    from database.connector import connect
+    print(parse_config_file('database')['mysql'])
 
-    connect(driver='sqlite3')
+

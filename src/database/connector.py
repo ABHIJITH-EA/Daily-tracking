@@ -14,7 +14,7 @@ def _driver_initializer(driver: str):
     db_class = driver.capitalize() + driver_suffix
     try:
         driver_module = importlib.import_module(db_driver_path)
-        driver_instance = getattr(driver_module, db_class)
+        driver_instance = (getattr(driver_module, db_class))()
     except ModuleNotFoundError:
         driver_instance = None
         logger.warn(f'No {driver} driver found')

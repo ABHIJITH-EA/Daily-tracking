@@ -12,6 +12,7 @@ class Activity(IntEnum):
 @unique
 class General(IntEnum):
     EXIT = 0
+    CRASHED = 1
 
 
 class System(Enum):
