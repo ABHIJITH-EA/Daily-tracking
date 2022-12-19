@@ -40,11 +40,13 @@ class MysqlDb(object):
         pass
 
 
-    def execute_script(self, statments: list):
+    def execute_script(self, statments: list) -> bool:
         try:
             for stm in statments:
                 self.cursor.execute(stm)
             self.connection.commit()
+            return True
         except mysql.connector.Error as e:
             self.connection.rollback()
             logger.error(e)
+            return False
