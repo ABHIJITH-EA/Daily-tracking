@@ -4,6 +4,7 @@ from database.connector import connect
 from logger import logger
 from base import sqlite_queries
 
+
 class AppInitializer:
 
     def __init__(self) -> None:
@@ -22,7 +23,7 @@ class AppInitializer:
         return True        
 
 
-    def create_mysql_tables(sql_stms: list):
+    def create_mysql_tables(sql_stms: list) -> bool:
         mysql_db = connect('mysql')
 
         if mysql_db.execute_script(sql_stms):
@@ -33,7 +34,8 @@ class AppInitializer:
             logger.info('Failed to set application database')
             return False
 
-    def set_app_database_status():
+
+    def set_app_database_status() -> None:
         sqlite_db = connect('sqlite')
 
         sqlite_db.execute(sqlite_queries.APP_DB_TABLE_ACTIVATE, commit=True)

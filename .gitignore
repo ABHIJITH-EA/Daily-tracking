@@ -1,4 +1,3 @@
 docs/design
 data/application.log
 **/__pycache__/
-data/*.db
