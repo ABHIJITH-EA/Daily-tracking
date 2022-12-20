@@ -17,8 +17,26 @@ class SqliteDb(object):
             logger.warning(f'Cannot find database {SQLITEDB_PATH}')
             sys.exit(General.CRASHED)
 
+
     def connect(self):
         self.cursor = self.connection.cursor()
+
+
+    def execute(self, statement: str, commit=False, get=False):
+        self.cursor.execute(statement)
+
+        if commit:
+            self.connection.commit()
+
+        if get:
+            ouput = self.cursor.fetchall()
+            return ouput
+
+        
+
+
+    def execute_script(self, source: list):
+        pass
 
 
     def close(self):

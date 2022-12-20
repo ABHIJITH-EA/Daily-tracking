@@ -1,5 +1,9 @@
+""" Main utility functions """
+
+import sys
 import os
 import config
+from base.constants import General
 
 try:
     import tomlib
@@ -36,6 +40,7 @@ def parse_config_file(key: str) -> dict | None:
             except KeyError:
                 pass
 
+
 # TODO: what happens if there is no sql file
 def read_sql_file(filename: str = 'sql.sql', dir: str = config.DATA_DIR) -> list:
     sql_file = os.path.join(dir, filename)
@@ -43,8 +48,8 @@ def read_sql_file(filename: str = 'sql.sql', dir: str = config.DATA_DIR) -> list
     try:
         with open(sql_file, 'r') as f:
             data = f.read()
-    except FileNotFoundError:
-        pass
+    except FileNotFoundError as e:
+        sys.exit(General.CRASHED)
 
     sql_commands = data.split(';')
 
