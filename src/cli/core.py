@@ -68,5 +68,3 @@ def debugger():
 
     for i in data.split(';'):
         print(f'{i}\n')
-
-

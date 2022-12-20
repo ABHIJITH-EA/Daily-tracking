@@ -3,6 +3,7 @@
 import sys
 import time
 from datetime import date
+from enum import IntEnum
 from cli import core, utils
 from base.constants import Activity, General, System
 from logger import logger
@@ -18,6 +19,7 @@ def log_message(msg: str, level = 'INFO'):
     print(log_text.rjust(0))
 
 
+# BUG: Not aligning properly
 def menu_printer(text: str, new_line=False) -> None:
     align_size = utils.aligner(text)
     print(f'{text}'.rjust(align_size))
@@ -25,6 +27,7 @@ def menu_printer(text: str, new_line=False) -> None:
         print() 
 
 
+# TODO: Code review
 def menu_header(header: str) -> None:
     today = date.today()
     day = date(today.year, today.month, today.day)
@@ -32,11 +35,11 @@ def menu_header(header: str) -> None:
     lines = '-' * len(header)
     menu_printer(header)
     menu_printer(lines, True)
-    menu_printer(tracking_date)
+    menu_printer(tracking_date, new_line=True)
 
 
 def menu_read_input(text: str) -> str:
-    align_size = utils.aligner(text)
+    align_size = len(text) + System.CONSOLE_MENU_ALIGN_SIZE.value
     data = input(text.rjust(align_size))
 
     return data
@@ -48,22 +51,41 @@ def menu_info(text: str) -> None:
 
 def daily_tracking_menu() -> list | None:
     user_data = []
+    select_options = IntEnum('ACTIVITY_OPTIONS',
+                ['VIEW', 'ADD'])
     menu_header('Daily tracking')
-    wakeup_time = menu_read_input('wake up time? ')
-    sleepy_time = menu_read_input('time went to sleep? ')
 
-    if DailyTrackingValidation.ispropertime(wakeup_time) == False:
-        log_message('Invalid wake up time', level='ERROR')
+    menu_printer('[*] View daily tracking data')
+    menu_printer('[*] Add daily tracking data')
+    
+    try:
+        user_selection = int(menu_read_input('Select: '))
+    except ValueError:
+        log_message('Bad input')
         return None
 
-    if DailyTrackingValidation.ispropertime(sleepy_time) == False:
-        log_message('Invalid sleepy up time', level='ERROR')
+    if user_selection == select_options.VIEW:
+        log_message('View data')
+    elif user_selection == select_options.ADD:
+        wakeup_time = menu_read_input('wake up time? ')
+        sleepy_time = menu_read_input('time went to sleep? ')
+
+        if DailyTrackingValidation.ispropertime(wakeup_time) == False:
+            log_message('Invalid wake up time', level='ERROR')
+            return None
+
+        if DailyTrackingValidation.ispropertime(sleepy_time) == False:
+            log_message('Invalid sleepy up time', level='ERROR')
+            return None
+
+        user_data.append(wakeup_time)
+        user_data.append(sleepy_time)
+
+        return user_data
+    else:
+        log_message('Invalid selection')
         return None
 
-    user_data.append(wakeup_time)
-    user_data.append(sleepy_time)
-
-    return user_data
 
 
 def budget_tracking_menu() -> list | None:
@@ -78,7 +100,7 @@ def repl():
                 case Activity.DAILY_TRACKING:
                     data = daily_tracking_menu()
                     if data is None:
-                        log_message('Failed to upload data')
+                        log_message('Activity closed')
                     else:
                         pool.daily_tracking_api.save_tracking_data(data)
                         log_message('Data uploaded successfully')

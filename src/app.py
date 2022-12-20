@@ -23,7 +23,7 @@ def precheck():
     app_model = app_initializer.AppInitializer()
 
     if app_model.check_database_status():
-        logger.info('Database is all set')
+        logger.info('Database connected')
         return True
     else:
         logger.info('Application loading for first time')

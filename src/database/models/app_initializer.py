@@ -27,7 +27,7 @@ class AppInitializer:
         mysql_db = connect('mysql')
 
         if mysql_db.execute_script(sql_stms):
-            logger.info('Application datbase are set')
+            logger.info('Application datbase initialized')
             AppInitializer.set_app_database_status()
             return True
         else:
