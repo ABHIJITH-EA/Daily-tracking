@@ -8,7 +8,7 @@ USE `XXXChange`;
 CREATE TABLE `daily_tracking`
 (
     `id` SERIAL COMMENT 'ID',
-    `day` DATE NOT NULL COMMENT 'Date',
+    `day` DATE NOT NULL UNIQUE COMMENT 'Date',
     `wakeup_time` TIME NOT NULL COMMENT 'The time got up in the morning',
     `sleepy_time` TIME NOT NULL COMMENT 'The time went to sleep',
     `created_at` DATETIME NOT NULL,

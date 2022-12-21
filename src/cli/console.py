@@ -92,7 +92,16 @@ def daily_tracking_menu() -> list | None:
 
 
 def budget_tracking_menu() -> list | None:
-    pass
+    user_data = []
+    submenu_select_options = IntEnum('ACTIVITY_OPTIONS',
+                ['INCOME', 'SPENT'])
+
+    menu_header('Budget tracking')
+
+    menu_printer('[*] Income tracking')
+    menu_printer('[*] Spent tracking')
+
+    return user_data
 
 
 def repl():

@@ -44,7 +44,6 @@ class MysqlDb(object):
     def insert_value(self, table: str, columns: tuple, values: tuple) -> None:
         columns = ','.join(columns)
         sub_values = ','.join(['%s'] * len(values))
-        # values = ','.join(values)
 
         statement = f"INSERT INTO {table} ({columns}) VALUES ({sub_values});"
         try:
