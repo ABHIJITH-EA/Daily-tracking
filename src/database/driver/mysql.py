@@ -28,6 +28,9 @@ class MysqlDb(object):
         self.connection.close()
 
 
+    def execute(self, statement):
+        pass
+
     def create_db(self, name: str) -> None:
         pass
 
@@ -36,8 +39,20 @@ class MysqlDb(object):
         pass
 
 
-    def insert_value(self) -> None:
-        pass
+    # TODO: multi-value insertation
+    # TODO: Review code
+    def insert_value(self, table: str, columns: tuple, values: tuple) -> None:
+        # columns = ','.join(columns)
+        sub_values = ','.join('?' * len(values))
+        statement = f"INSERT INTO {table} {tuple(columns)} VALUES (%s);" %sub_values
+        logger.debug(f'SQL: {statement} type: {type(statement)}')
+        try:
+            self.cursor.execute(statement, values)
+            self.connection.commit()
+            return True
+        except mysql.connector.Error as e:
+            logger.error(e)
+            return False
 
 
     def execute_script(self, statments: list) -> bool:

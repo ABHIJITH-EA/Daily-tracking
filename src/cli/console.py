@@ -10,6 +10,8 @@ from logger import logger
 from api.validations.daily_tracking import DailyTrackingValidation
 from api.validations.budget_tracking import BudgetTrackingValidation
 import pool
+from base.datetime_utils import current_date
+
 
 # TODO: Fix level ambiguity eg: `INFO` verbose
 def log_message(msg: str, level = 'INFO'):
@@ -56,7 +58,7 @@ def daily_tracking_menu() -> list | None:
     menu_header('Daily tracking')
 
     menu_printer('[*] View daily tracking data')
-    menu_printer('[*] Add daily tracking data')
+    menu_printer('[*] Add daily tracking data', new_line=True)
     
     try:
         user_selection = int(menu_read_input('Select: '))
@@ -78,6 +80,7 @@ def daily_tracking_menu() -> list | None:
             log_message('Invalid sleepy up time', level='ERROR')
             return None
 
+        user_data.append(current_date())
         user_data.append(wakeup_time)
         user_data.append(sleepy_time)
 
@@ -102,9 +105,11 @@ def repl():
                     if data is None:
                         log_message('Activity closed')
                     else:
-                        pool.daily_tracking_api.save_tracking_data(data)
-                        log_message('Data uploaded successfully')
-                        logger.info('Daily activity saved')
+                        if pool.daily_tracking_api.save_tracking_data(data):
+                            log_message('Data uploaded successfully')
+                            logger.info('Daily activity saved')
+                        else:
+                            log_message("Coudn't add data")
                 case Activity.BUDGETING:
                     data = budget_tracking_menu()
                     if data is None:

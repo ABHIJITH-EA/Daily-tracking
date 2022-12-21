@@ -2,7 +2,6 @@
 
 from base.constants import System
 
-
 def aligner(text: str) -> int:
     align_size = System.SECONDARY_LEFT_ALIGN.value \
                 + System.CONSOLE_MENU_ALIGN_SIZE.value
