@@ -8,4 +8,4 @@
 
 - ## Fine tune database configurations
 
-## Application initialization
+- ## Application initialization
