@@ -42,10 +42,11 @@ class MysqlDb(object):
     # TODO: multi-value insertation
     # TODO: Review code
     def insert_value(self, table: str, columns: tuple, values: tuple) -> None:
-        # columns = ','.join(columns)
-        sub_values = ','.join('?' * len(values))
-        statement = f"INSERT INTO {table} {tuple(columns)} VALUES (%s);" %sub_values
-        logger.debug(f'SQL: {statement} type: {type(statement)}')
+        columns = ','.join(columns)
+        sub_values = ','.join(['%s'] * len(values))
+        # values = ','.join(values)
+
+        statement = f"INSERT INTO {table} ({columns}) VALUES ({sub_values});"
         try:
             self.cursor.execute(statement, values)
             self.connection.commit()

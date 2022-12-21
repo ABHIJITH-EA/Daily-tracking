@@ -1,7 +1,9 @@
 """ API for daily tracking activties """
 
 from database import connector
-from base.datetime_utils import current_datetime, datetime_to_db
+from base.datetime_utils import current_datetime, to_db_datetime, to_db_time, to_db_date
+from logger import logger
+
 
 class DailyTracking:
     
@@ -13,10 +15,16 @@ class DailyTracking:
     def save_tracking_data(self, data:list) -> None:
         columns = ['day', 'wakeup_time', 'sleepy_time', 'created_at', 'updated_at']
         
-        created_at = updated_at = datetime_to_db(current_datetime())
+        created_at = updated_at = to_db_datetime(current_datetime())
+        
+        fmt = '%I:%M %p'
 
-        values = [data[0], data[1], data[2], created_at, updated_at]
+        wakeup_time = to_db_time(data[1], fmt)
+        sleepy_time = to_db_time(data[2], fmt)
+        day = to_db_date(data[0])
 
+        values = [day, wakeup_time, sleepy_time, created_at, updated_at]
+        logger.debug(f'Values: {values} Columns: {columns}')
         result = self.mysql_db.insert_value(table = DailyTracking.table,
                         columns = columns, values = values)
         

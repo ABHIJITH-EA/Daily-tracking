@@ -15,8 +15,8 @@ CREATE TABLE `daily_tracking`
     `created_by` VARCHAR(45) DEFAULT 'system',
     `updated_at` DATETIME NOT NULL,
     `updated_by` VARCHAR(45) DEFAULT 'system',
-    `deleated_at` DATETIME NOT NULL,
-    `deleated_by` VARCHAR(45) DEFAULT 'system',
+    `deleated_at` DATETIME,
+    `deleated_by` VARCHAR(45),
     PRIMARY KEY (`id`)
 );
 
@@ -29,8 +29,8 @@ CREATE TABLE `budget_tracking`
     `created_by` VARCHAR(45) DEFAULT 'system',
     `updated_at` DATETIME NOT NULL,
     `updated_by` VARCHAR(45) DEFAULT 'system',
-    `deleated_at` DATETIME NOT NULL,
-    `deleated_by` VARCHAR(45) DEFAULT 'system',
+    `deleated_at` DATETIME,
+    `deleated_by` VARCHAR(45),
     PRIMARY KEY (`id`)
 );
 
@@ -44,8 +44,8 @@ CREATE TABLE `spent`
     `created_by` VARCHAR(45) DEFAULT 'system',
     `updated_at` DATETIME NOT NULL,
     `updated_by` VARCHAR(45) DEFAULT 'system',
-    `deleated_at` DATETIME NOT NULL,
-    `deleated_by` VARCHAR(45) DEFAULT 'system',
+    `deleated_at` DATETIME,
+    `deleated_by` VARCHAR(45),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`budgeting_id`) REFERENCES `budget_tracking`(`id`)
 );
@@ -60,8 +60,8 @@ CREATE TABLE `income`
     `created_by` VARCHAR(45) DEFAULT 'system',
     `updated_at` DATETIME NOT NULL,
     `updated_by` VARCHAR(45) DEFAULT 'system',
-    `deleated_at` DATETIME NOT NULL,
-    `deleated_by` VARCHAR(45) DEFAULT 'system',
+    `deleated_at` DATETIME,
+    `deleated_by` VARCHAR(45),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`budgeting_id`) REFERENCES `budget_tracking`(`id`)
 );
