@@ -7,3 +7,5 @@
 - ## Database security
 
 - ## Fine tune database configurations
+
+## Application initialization
