@@ -29,7 +29,11 @@ class MysqlDb(object):
 
 
     def execute(self, statement):
-        pass
+        try:
+            self.cursor.execute(statement)
+        except mysql.connector.Error as e:
+            logger.error(e)
+            return False
 
     def create_db(self, name: str) -> None:
         pass
@@ -65,3 +69,7 @@ class MysqlDb(object):
             self.connection.rollback()
             logger.error(e)
             return False
+
+    
+    def select_first(self):
+        return self.cursor.fetchone()

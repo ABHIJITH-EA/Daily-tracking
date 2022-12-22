@@ -2,6 +2,7 @@
 
 from api.budget_tracking import BudgetTracking
 from base.datetime_utils import to_db_datetime, current_datetime
+from api.validations.budget_tracking import BudgetTrackingValidation
 
 class SpentTracking(BudgetTracking):
     
@@ -13,7 +14,7 @@ class SpentTracking(BudgetTracking):
 
     def save_spent_data(self, data: list):
         # 'budgeting_id', 
-        columns = ['amount', 'remarks', 'created_at', 'updated_at']
+        columns = ['budgeting_id', 'amount', 'remarks', 'created_at', 'updated_at']
 
         created_at = updated_at = to_db_datetime(current_datetime())
 

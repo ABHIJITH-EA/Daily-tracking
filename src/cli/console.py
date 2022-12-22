@@ -113,7 +113,7 @@ def spent_tracking():
 
     return user_data
 
-
+# TODO: Code review
 def budget_tracking_menu() -> list | None:
     submenu_select_options = IntEnum('ACTIVITY_OPTIONS',
                 ['INCOME', 'SPENT'])
@@ -131,15 +131,18 @@ def budget_tracking_menu() -> list | None:
 
     if user_selection == submenu_select_options.INCOME:
         data = income_tracking()
-
-        return data
     elif user_selection == submenu_select_options.SPENT:
         data = spent_tracking()
-
-        return data
+        if data is None:
+            log_message('Activity closed')
+        else:
+            if pool.spent_tracking_api.save_spent_data(data):
+                log_message('Data uploaded successfully')
+                logger.info('Spent activty saved')
+            else:
+                log_message("Coudn't save spent activity")
     else:
         log_message('Invalid selection')
-        return None
 
 
 def repl():
@@ -158,11 +161,7 @@ def repl():
                         else:
                             log_message("Coudn't add data")
                 case Activity.BUDGETING:
-                    data = budget_tracking_menu()
-                    if data is None:
-                        log_message('Failed to upload data')
-                    else:
-                        pass
+                    budget_tracking_menu()
                 case General.EXIT:
                     log_message('EXITING')
                     sys.exit(0)
