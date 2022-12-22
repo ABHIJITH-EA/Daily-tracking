@@ -1,5 +1,10 @@
 """ API for budget tracking activities """
 
+from database import connector
 
 class BudgetTracking:
-    pass
+    
+    table = 'budget_tracking'
+
+    def __init__(self) -> None:
+        self.mysql_db = connector.connect(driver='mysql')

@@ -41,7 +41,7 @@ class MysqlDb(object):
 
     # TODO: multi-value insertation
     # TODO: Review code
-    def insert_value(self, table: str, columns: tuple, values: tuple) -> None:
+    def insert_value(self, table: str, columns: list, values: list) -> None:
         columns = ','.join(columns)
         sub_values = ','.join(['%s'] * len(values))
 

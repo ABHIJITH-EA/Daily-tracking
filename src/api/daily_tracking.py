@@ -28,8 +28,10 @@ class DailyTracking:
         
         return False if not result else True
 
-    def update_wakeup_time(self) -> None:
+
+    def update_wakeup_time(self, wake_time: str) -> None:
         pass
 
-    def update_sleepy_time(self) -> None:
+
+    def update_sleepy_time(self, sleepy_time: str) -> None:
         pass
