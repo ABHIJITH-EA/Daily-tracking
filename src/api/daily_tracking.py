@@ -2,7 +2,6 @@
 
 from database import connector
 from base.datetime_utils import current_datetime, to_db_datetime, to_db_time, to_db_date
-from logger import logger
 
 
 class DailyTracking:
@@ -24,7 +23,6 @@ class DailyTracking:
         day = to_db_date(data[0])
 
         values = [day, wakeup_time, sleepy_time, created_at, updated_at]
-        logger.debug(f'Values: {values} Columns: {columns}')
         result = self.mysql_db.insert_value(table = DailyTracking.table,
                         columns = columns, values = values)
         

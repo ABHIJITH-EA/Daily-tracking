@@ -91,11 +91,27 @@ def daily_tracking_menu() -> list | None:
 
 
 def income_tracking():
-    pass
+    user_data = []
+
+    return user_data
 
 
 def spent_tracking():
-    pass
+    user_data = []
+
+    try:
+        amount = float(menu_read_input('Amount spent? '))
+    except ValueError as e:
+        log_message('Bad amount format', 'ERROR')
+        return None
+
+    remark = menu_read_input('Why did you spent? ')
+
+    user_data.append(amount)
+    user_data.append(remark)
+
+
+    return user_data
 
 
 def budget_tracking_menu() -> list | None:
@@ -114,13 +130,16 @@ def budget_tracking_menu() -> list | None:
         return None
 
     if user_selection == submenu_select_options.INCOME:
-        income_tracking()
+        data = income_tracking()
+
+        return data
     elif user_selection == submenu_select_options.SPENT:
-        spent_tracking()
+        data = spent_tracking()
+
+        return data
     else:
         log_message('Invalid selection')
         return None
-
 
 
 def repl():
