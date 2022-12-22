@@ -90,18 +90,37 @@ def daily_tracking_menu() -> list | None:
         return None
 
 
+def income_tracking():
+    pass
+
+
+def spent_tracking():
+    pass
+
 
 def budget_tracking_menu() -> list | None:
-    user_data = []
     submenu_select_options = IntEnum('ACTIVITY_OPTIONS',
                 ['INCOME', 'SPENT'])
 
     menu_header('Budget tracking')
 
     menu_printer('[*] Income tracking')
-    menu_printer('[*] Spent tracking')
+    menu_printer('[*] Spent tracking', new_line=True)
 
-    return user_data
+    try:
+        user_selection = int(menu_read_input('Select: '))
+    except ValueError:
+        log_message('Bad input')
+        return None
+
+    if user_selection == submenu_select_options.INCOME:
+        income_tracking()
+    elif user_selection == submenu_select_options.SPENT:
+        spent_tracking()
+    else:
+        log_message('Invalid selection')
+        return None
+
 
 
 def repl():
