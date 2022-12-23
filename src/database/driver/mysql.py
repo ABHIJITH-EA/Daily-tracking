@@ -7,6 +7,37 @@ from logger import logger
 from base.constants import General
 
 
+class WhereCondition:
+
+    def __init__(self, statement:str):
+        self.statement = statement
+
+
+    def and_cond(self, column: str, value: str):
+        try:
+            self.statement += f" AND {column} = {value}"
+        except TypeError as e:
+            logger.error(f'invalid data type of {value}')
+            return None
+
+        return WhereCondition(self.statement)
+
+    def or_cond(self, column: str, value: str):
+        try:
+            self.statement += f" OR {column} = {value}"
+        except TypeError as e:
+            logger.error(f'invalid data type of {value}')
+            return None
+
+        return WhereCondition(self.statement)
+
+
+    # TODO: Remove hardcoding `;`
+    def create(self):
+        self.statement += ';'
+        return self.statement
+
+
 class MysqlDb(object):
 
     def __init__(self, limit: int = 10):
@@ -49,18 +80,30 @@ class MysqlDb(object):
         
         # Checking default limit changed or not
         limit = self.limit if limit is None else limit
-        
-        try:
-            self.cursor.execute(statement)
-            return self.cursor.fetchmany(limit)
-        except mysql.connector.Error as e:
-            logger.error(e)
+        if not self.execute(statement):
             return None
+        return self.cursor.fetchmany(limit)
 
-    def select_where(self, table:str, columns: list, where_colums: list,\
-                    limit: int = None):
+
+    def select_where(self, table:str, column: str, where_colum: str, value: str) -> WhereCondition:
         columns = ','.join(columns)
-        statement = f"SELECT {columns} FROM {table} WHERE"
+        
+        # Checking default limit changed or not
+        limit = self.limit if limit is None else limit
+
+        statement = f"SELECT {column} FROM {table} WHERE {where_colum}"
+
+        return WhereCondition(statement=statement)
+
+
+    # TODO: Remove hardcoding `;`
+    def execute_select_where(self, statement: str, limit: int = None):
+        # Checking default limit changed or not
+        limit = self.limit if limit is None else limit
+
+        if not self.execute(statement=statement):
+            return None
+        return self.cursor.fetchmany(limit)
 
 
     # TODO: multi-value insertation

@@ -4,7 +4,7 @@
 
 - ## Code review
 
-- ## Database security
+- ## Database security eg: SQLinjection
 
 - ## Fine tune database configurations
 
