@@ -85,13 +85,9 @@ class MysqlDb(object):
         return self.cursor.fetchmany(limit)
 
 
-    def select_where(self, table:str, column: str, where_colum: str, value: str) -> WhereCondition:
+    def select_where(self, table:str, columns: str, where_colum: str, value: str) -> WhereCondition:
         columns = ','.join(columns)
-        
-        # Checking default limit changed or not
-        limit = self.limit if limit is None else limit
-
-        statement = f"SELECT {column} FROM {table} WHERE {where_colum}"
+        statement = f"SELECT {columns} FROM {table} WHERE {where_colum}"
 
         return WhereCondition(statement=statement)
 

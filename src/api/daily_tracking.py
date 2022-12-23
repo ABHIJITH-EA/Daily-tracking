@@ -11,6 +11,7 @@ class DailyTracking:
     def __init__(self):
         self.mysql_db = connector.connect(driver='mysql')
 
+    # TODO: interface with model class
     def save_tracking_data(self, data:list) -> None:
         columns = ['day', 'wakeup_time', 'sleepy_time', 'created_at', 'updated_at']
         
