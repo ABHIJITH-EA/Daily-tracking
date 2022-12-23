@@ -3,6 +3,7 @@
 from api.budget_tracking import BudgetTracking
 from base.datetime_utils import to_db_datetime, current_datetime
 from api.validations.budget_tracking import BudgetTrackingValidation
+from base.datetime_utils import current_date
 
 class SpentTracking(BudgetTracking):
     
@@ -13,18 +14,19 @@ class SpentTracking(BudgetTracking):
     
 
     def save_spent_data(self, data: list):
-        
+        day  = current_date()
+
         if BudgetTrackingValidation.is_firsttime_today():
             pass
         
         columns = ['budgeting_id', 'amount', 'remarks', 'created_at', 'updated_at']
 
+        budgeting_id = super().get_id(day)
         created_at = updated_at = to_db_datetime(current_datetime())
-
         amnt = data[0]
         remarks = data[1]
 
-        values = [amnt, remarks, created_at, updated_at]
+        values = [budgeting_id, amnt, remarks, created_at, updated_at]
 
         result = self.mysql_db.insert_value(SpentTracking.table, columns, values)
 

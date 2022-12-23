@@ -10,6 +10,7 @@ from base.constants import General
 
 class SqliteDb(object):
     
+    # TODO: Add in memory DB support
     def __init__(self):
         try:
             self.connection = sqlite3.connect(SQLITEDB_PATH)
@@ -40,4 +41,4 @@ class SqliteDb(object):
 
 
     def close(self):
-        pass
+        self.cursor.close()

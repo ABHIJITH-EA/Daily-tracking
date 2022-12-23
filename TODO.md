@@ -9,3 +9,5 @@
 - ## Fine tune database configurations
 
 - ## Application initialization
+
+- ## Find and add type hint for DB connections

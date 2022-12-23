@@ -57,6 +57,11 @@ class MysqlDb(object):
             logger.error(e)
             return None
 
+    def select_where(self, table:str, columns: list, where_colums: list,\
+                    limit: int = None):
+        columns = ','.join(columns)
+        statement = f"SELECT {columns} FROM {table} WHERE"
+
 
     # TODO: multi-value insertation
     # TODO: Review code
