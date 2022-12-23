@@ -8,3 +8,7 @@ class BudgetTracking:
 
     def __init__(self) -> None:
         self.mysql_db = connector.connect(driver='mysql')
+
+    
+    def get_id(self, day:str):
+        pass

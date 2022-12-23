@@ -13,7 +13,10 @@ class SpentTracking(BudgetTracking):
     
 
     def save_spent_data(self, data: list):
-        # 'budgeting_id', 
+        
+        if BudgetTrackingValidation.is_firsttime_today():
+            pass
+        
         columns = ['budgeting_id', 'amount', 'remarks', 'created_at', 'updated_at']
 
         created_at = updated_at = to_db_datetime(current_datetime())

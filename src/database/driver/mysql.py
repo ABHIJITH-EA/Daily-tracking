@@ -9,9 +9,9 @@ from base.constants import General
 
 class MysqlDb(object):
 
-    def __init__(self):
+    def __init__(self, limit: int = 10):
         self.config = get_mysql_config()
-
+        self.limit = limit
         try:
             self.connection = mysql.connector.connect(**self.config)
             self.connection.autocommit = False
@@ -43,6 +43,21 @@ class MysqlDb(object):
         pass
 
 
+    def select(self, table:str, columns: list, limit:int = None):
+        columns = ','.join(columns)
+        statement = f"SELECT {columns} FROM {table};"
+        
+        # Checking default limit changed or not
+        limit = self.limit if limit is None else limit
+        
+        try:
+            self.cursor.execute(statement)
+            return self.cursor.fetchmany(limit)
+        except mysql.connector.Error as e:
+            logger.error(e)
+            return None
+
+
     # TODO: multi-value insertation
     # TODO: Review code
     def insert_value(self, table: str, columns: list, values: list) -> None:
@@ -71,5 +86,6 @@ class MysqlDb(object):
             return False
 
     
-    def select_first(self):
+    # BUG: Not accounting for the `execute` failure scenario
+    def first_row(self):
         return self.cursor.fetchone()

@@ -22,6 +22,6 @@ class BudgetTrackingValidation:
         if not mysql_db.execute(stm):
             return False
 
-        status = mysql_db.select_first()
+        status = mysql_db.first_row()
 
-        return True if status is None else True
+        return True if status is None else False
