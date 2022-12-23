@@ -11,3 +11,7 @@ class BudgetTracking:
     def get_budgettracking_id(self, day:str) -> int:
         
         return self.model.get_id(day)
+
+
+    def create_budgettracking_data(self):
+        self.model.save()

@@ -52,7 +52,7 @@ class MysqlDb(object):
 
 
     def connect(self):
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(buffered=True)
 
 
     def close(self):
@@ -62,6 +62,7 @@ class MysqlDb(object):
     def execute(self, statement):
         try:
             self.cursor.execute(statement)
+            return True
         except mysql.connector.Error as e:
             logger.error(e)
             return False
@@ -87,7 +88,7 @@ class MysqlDb(object):
 
     def select_where(self, table:str, columns: str, where_colum: str, value: str) -> WhereCondition:
         columns = ','.join(columns)
-        statement = f"SELECT {columns} FROM {table} WHERE {where_colum}"
+        statement = f"SELECT {columns} FROM {table} WHERE {where_colum} = {value}"
 
         return WhereCondition(statement=statement)
 

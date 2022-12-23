@@ -1,6 +1,7 @@
 
 from database import connector
 from database.driver.mysql import MysqlDb
+from base.datetime_utils import current_date, current_datetime, to_db_datetime, to_db_date
 
 class BudgetTrackingModel:
     
@@ -30,3 +31,16 @@ class BudgetTrackingModel:
         budget_id = self.mysql_db.execute_select_where(statement)
 
         return budget_id
+
+    def save(self):
+        day = to_db_date(current_date())
+
+        columns = [self._day, self._created_at, self._updated_at]
+
+        created_at = updated_at =  to_db_datetime(current_datetime())
+
+        values = [day, created_at, updated_at]
+
+        status = self.mysql_db.insert_value(self._table, columns, values)
+
+        return status

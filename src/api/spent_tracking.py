@@ -13,11 +13,9 @@ class SpentTracking(BudgetTracking):
     
 
     def save_spent_data(self, data: list):
-        # ?
         if BudgetTrackingValidation.is_firsttime_today():
-            pass
-
-        self.model.save()
+            if not super().create_budgettracking_data():
+                return None
 
         amnt = data[0]
         remarks = data[1]

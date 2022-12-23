@@ -1,6 +1,6 @@
 """ Validations for budget tracking activities """
 
-from base.datetime_utils import current_date
+from base.datetime_utils import current_date, to_db_date
 from database import connector
 
 
@@ -14,9 +14,9 @@ class BudgetTrackingValidation:
         """
         mysql_db = connector.connect(driver='mysql')
         
-        day = current_date()
+        day = to_db_date(current_date())
         
-        stm = f'SELECT id FROM {BudgetTrackingValidation.table} WHERE day={day};'
+        stm = f"SELECT id FROM {BudgetTrackingValidation.table} WHERE day='{day}';"
         
         # BUG: Not logical
         if not mysql_db.execute(stm):

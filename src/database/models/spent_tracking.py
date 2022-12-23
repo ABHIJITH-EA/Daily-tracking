@@ -1,7 +1,7 @@
 
 from database.models.budget_tracking import BudgetTrackingModel
 from base.datetime_utils import current_date
-from base.datetime_utils import to_db_datetime, current_datetime
+from base.datetime_utils import to_db_datetime, current_datetime, to_db_date, to_db_datetime
 
 
 class SpentTrackingModel(BudgetTrackingModel):
@@ -25,7 +25,7 @@ class SpentTrackingModel(BudgetTrackingModel):
     def save(self, amount: int, remarks: str):
         """ Save the spent details of the day
         """
-        day  = current_date()
+        day  = to_db_date(current_date())
         columns = self._all_columns()
         budgeting_id = self.get_id(day)
         created_at = updated_at = to_db_datetime(current_datetime())
