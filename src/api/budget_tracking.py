@@ -14,4 +14,4 @@ class BudgetTracking:
 
 
     def create_budgettracking_data(self):
-        self.model.save()
+        return self.model.save()

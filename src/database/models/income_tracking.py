@@ -1,11 +1,9 @@
 
 from database.models.budget_tracking import BudgetTrackingModel
-from base.datetime_utils import current_date
-from base.datetime_utils import to_db_datetime, current_datetime, to_db_date, to_db_datetime
+from base.datetime_utils import to_db_date, current_date, to_db_datetime, current_datetime
 
-
-class SpentTrackingModel(BudgetTrackingModel):
-    __table = 'spent'
+class IncomeTrackingModel(BudgetTrackingModel):
+    __table = 'income'
 
     _id = 'id'
     __budgeting_id = 'budgeting_id'
@@ -18,12 +16,13 @@ class SpentTrackingModel(BudgetTrackingModel):
     __updated_by = 'updated_by'
     __deleated_by = 'deleated_by'
 
+
     def __init__(self) -> None:
         super().__init__()
 
-    
+
     def save(self, amount: int, remarks: str):
-        """ Save the spent details of the day
+        """ Save the income details of the day
         """
         day  = to_db_date(current_date())
         columns = self._all_columns()

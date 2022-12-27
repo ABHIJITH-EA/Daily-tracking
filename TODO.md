@@ -11,3 +11,5 @@
 - ## Application initialization
 
 - ## Find and add type hint for DB connections
+
+- ## Review database design (amount data type in budgeting)

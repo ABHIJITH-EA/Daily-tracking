@@ -8,13 +8,15 @@ from database.models.spent_tracking import SpentTrackingModel
 class SpentTracking(BudgetTracking):
     def __init__(self) -> None:
         super().__init__()
-
+        # NOTE: Work around for java type inheritance
+        # Have to change later in a pythonic way.
+        self._super = BudgetTracking()
         self.model = SpentTrackingModel()
     
 
     def save_spent_data(self, data: list):
         if BudgetTrackingValidation.is_firsttime_today():
-            if not super().create_budgettracking_data():
+            if not self._super.create_budgettracking_data():
                 return None
 
         amnt = data[0]

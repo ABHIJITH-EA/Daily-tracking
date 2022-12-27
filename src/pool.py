@@ -25,7 +25,7 @@ def _get_spent_tracking_api() -> SpentTracking:
 
 
 def _get_income_tracking_api() -> IncomeTracking:
-    return IncomeTracking
+    return IncomeTracking()
 
 
 def activate() -> None:

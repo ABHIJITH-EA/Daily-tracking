@@ -93,6 +93,17 @@ def daily_tracking_menu() -> list | None:
 def income_tracking():
     user_data = []
 
+    try:
+        amount = float(menu_read_input('Income amount? '))
+    except ValueError as e:
+        log_message('Bad amount format', 'ERROR')
+        return None
+
+    remark = menu_read_input('How did you got? ')
+
+    user_data.append(amount)
+    user_data.append(remark)
+
     return user_data
 
 
@@ -109,7 +120,6 @@ def spent_tracking():
 
     user_data.append(amount)
     user_data.append(remark)
-
 
     return user_data
 
@@ -131,6 +141,14 @@ def budget_tracking_menu() -> list | None:
 
     if user_selection == submenu_select_options.INCOME:
         data = income_tracking()
+        if data is None:
+            log_message('Activity closed')
+        else:
+            if pool.income_tracking_api.save_income_data(data):
+                log_message('Data uploaded successfully')
+                logger.info('Income activty saved')
+            else:
+                log_message("Coudn't save income activity")
     elif user_selection == submenu_select_options.SPENT:
         data = spent_tracking()
         if data is None:
