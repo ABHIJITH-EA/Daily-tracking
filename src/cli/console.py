@@ -166,7 +166,7 @@ def budget_tracking_menu() -> list | None:
 def repl():
     while True:
         try:
-            user_input = int(input(System.APP_NAME.value))
+            user_input = int(input(System.APP_STDIN.value))
             match user_input:
                 case Activity.DAILY_TRACKING:
                     data = daily_tracking_menu()
