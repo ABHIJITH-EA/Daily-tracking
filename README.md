@@ -11,3 +11,10 @@
 ### Development
 ---
 - If your using a virtual enviornment make use of `setup.sh`
+
+
+# Phase
+
+- CLI <img src="https://progress-bar.dev/60/" alt="drawing" style="width:50px;"/>
+
+- GUI <img src="https://progress-bar.dev/20/" alt="drawing" style="width:50px;"/>
