@@ -1,13 +1,11 @@
+
 import os
+import config
 
-BASE = os.getcwd()
 
-RESOURCE_DIR = os.path.join(BASE, 'resources')
-STYLESHEET_DIR = os.path.join(RESOURCE_DIR, 'styles')
-
-def read_style_sheet(filename: str, dir: str=STYLESHEET_DIR):
-    filepath = os.path.join(dir, filename)
-
+def read_style_sheet(filename: str, dir: str='styles'):
+    filepath = os.path.join(config.RESOURCE_DIR, dir)
+    
     if not os.path.isfile(filepath):
         raise FileNotFoundError
     
