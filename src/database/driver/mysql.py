@@ -119,6 +119,19 @@ class MysqlDb(object):
             return False
 
 
+    def delete_query(self, table: str, where_column: str, value):
+        statement = f"DELETE FROM {table} WHERE {where_column} = '{value}'"
+
+        return WhereCondition(statement)
+
+
+    def delete_row(self, statement: str):
+        if not self.execute(statement):
+            return False
+        self.connection.commit()
+        return True
+
+
     def execute_script(self, statments: list) -> bool:
         try:
             for stm in statments:

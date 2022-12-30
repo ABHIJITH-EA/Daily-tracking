@@ -1,13 +1,15 @@
-""" XXXChange app gui start from here """
+""" """
 
 import sys
 from PyQt6.QtWidgets import QApplication
-from gui.views import home
 
-def start_gui():
+from gui.views.home_window import HomeWindow
+
+
+def run():
     app = QApplication([])
 
-    maiwindow = home.Home()
-    maiwindow.show()
+    home_window = HomeWindow()
+    home_window.show()
 
     sys.exit(app.exec())

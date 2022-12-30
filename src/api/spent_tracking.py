@@ -25,3 +25,10 @@ class SpentTracking(BudgetTracking):
         result = self.model.save(amount=amnt, remarks=remarks)
 
         return False if not result else True
+
+
+    def delete_spent_data(self, id: int):
+        if not self.model.delete(id):
+            return False
+
+        return True

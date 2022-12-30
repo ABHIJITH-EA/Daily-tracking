@@ -54,3 +54,12 @@ def read_sql_file(filename: str = 'sql.sql', dir: str = config.DATA_DIR) -> list
     sql_commands = data.split(';')
 
     return sql_commands
+
+
+def read_resource_file(filename: str, dir: str = config.RESOURCE_DIR):
+    resource_file = os.path.join(dir, filename)
+
+    with open(resource_file, 'rb') as f:
+        data = f.read()
+
+    return data.decode('utf-8')

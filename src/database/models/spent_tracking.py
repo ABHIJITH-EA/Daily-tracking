@@ -7,7 +7,7 @@ from base.datetime_utils import to_db_datetime, current_datetime, to_db_date, to
 class SpentTrackingModel(BudgetTrackingModel):
     __table = 'spent'
 
-    _id = 'id'
+    __id = 'id'
     __budgeting_id = 'budgeting_id'
     __amount = 'amount'
     __remarks = 'remarks'
@@ -36,6 +36,12 @@ class SpentTrackingModel(BudgetTrackingModel):
 
         return status
 
+    
+    def delete(self, id):
+        delete_stm = self.mysql_db.delete_query(self.__table, where_column=self.__id, value=id).create()
+        status = self.mysql_db.delete_row(delete_stm)
+
+        return status
 
     def _all_columns(self) -> list:
         """ Get all the attributes of the table

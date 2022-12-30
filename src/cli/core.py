@@ -2,7 +2,6 @@ import version
 from utils import get_yaml_config, parse_config_file
 from logger import logger
 
-
 def parse_config(key: str) -> dict | None:
     config_data = get_yaml_config('cli.yaml')
     try:
@@ -60,11 +59,13 @@ def application_menu() -> None:
 
 # Debugger for the cli system
 def debugger():
-    import config
-    import os
-    path = os.path.join(config.DATA_DIR, 'sql.sql')
-    with open(path, 'r') as f:
-        data = f.read()
+    import pool
+    if not pool.check_status():
+        print('Failed API connection')
+    else:
+        print('API active')
 
-    for i in data.split(';'):
-        print(f'{i}\n')
+    if pool.spent_tracking_api.delete_spent_data(9):
+        print('DELETE SUCESSFULL')
+    else:
+        print('DELETE FAILED')

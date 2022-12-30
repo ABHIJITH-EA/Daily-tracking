@@ -9,7 +9,7 @@ import pool
 from base.constants import General
 from database.models import app_initializer
 from utils import read_sql_file
-from gui.main import start_gui
+from gui.main import run
 
 
 def create_app():
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         if not precheck():
             create_app()
         pool.activate()
-        console.init()
-        # start_gui()
+        # console.init()
+        run()
     except Exception as e:
         logger.error(traceback.format_exc())

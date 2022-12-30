@@ -1,0 +1,4 @@
+
+
+class HelpWindow():
+    pass
