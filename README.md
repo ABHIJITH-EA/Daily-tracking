@@ -1,4 +1,8 @@
 ## XXXChange
+\
+![](./docs/screenshots/xxxchange_20221230_1553.png)
+
+\
 [![python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)]()
 [![linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)]()
 [![mysql](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=whitexxx)]()
@@ -15,6 +19,6 @@
 
 # Phase
 
-- CLI <img src="https://progress-bar.dev/60/" alt="drawing" style="width:50px;"/>
+- CLI <img src="https://progress-bar.dev/60/" alt="drawing" style="width:60px;"/>
 
-- GUI <img src="https://progress-bar.dev/20/" alt="drawing" style="width:50px;"/>
+- GUI <img src="https://progress-bar.dev/20/" alt="drawing" style="width:60px;"/>
