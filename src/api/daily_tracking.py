@@ -2,6 +2,9 @@
 
 from database import connector
 from base.datetime_utils import current_datetime, to_db_datetime, to_db_time, to_db_date
+from api.validations.daily_tracking import DailyTrackingValidation
+
+from logger import logger
 
 
 class DailyTracking:
@@ -10,6 +13,7 @@ class DailyTracking:
 
     def __init__(self):
         self.mysql_db = connector.connect(driver='mysql')
+        self.validation = DailyTrackingValidation()
 
     # TODO: interface with model class
     def save_tracking_data(self, data:list) -> None:
@@ -19,6 +23,10 @@ class DailyTracking:
         
         fmt = '%I:%M %p'
 
+        if not self.validation.ispropertime(data[1]) or not self.validation.ispropertime(data[2]):
+            logger.error('Invalid time format')
+            return False
+
         wakeup_time = to_db_time(data[1], fmt)
         sleepy_time = to_db_time(data[2], fmt)
         day = to_db_date(data[0])
@@ -27,7 +35,12 @@ class DailyTracking:
         result = self.mysql_db.insert_value(table = DailyTracking.table,
                         columns = columns, values = values)
         
-        return False if not result else True
+        if not result:
+            logger.info('Failed to save daily tracking data')
+            return False
+        else:
+            logger.info('Daily tracking data saved successfully')
+            return True
 
 
     def update_wakeup_time(self, wake_time: str) -> None:

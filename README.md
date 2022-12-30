@@ -14,7 +14,7 @@
 
 ### Development
 ---
-- If your using a virtual enviornment make use of `setup.sh`
+- If running on a virtual enviornment make use of `setup.sh`
 
 
 # Phase

@@ -1,4 +1,5 @@
 
+import pool
 
 class SpentTrackingController:
 
@@ -6,5 +7,5 @@ class SpentTrackingController:
         pass
 
 
-    def save(self):
-        print("Saved")
+    def save(self, data: list):
+        return pool.spent_tracking_api.save_spent_data(data)

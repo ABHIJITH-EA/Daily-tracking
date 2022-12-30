@@ -4,7 +4,7 @@ import sys
 from PyQt6.QtWidgets import QApplication
 
 from gui.views.home_window import HomeWindow
-
+from logger import logger
 
 def run():
     app = QApplication([])

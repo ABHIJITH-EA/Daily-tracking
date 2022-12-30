@@ -6,8 +6,11 @@ from logger import logger
 
 class DailyTrackingValidation:
 
-    @staticmethod
-    def ispropertime(time: str) -> bool:
+    def __init__(self) -> None:
+        pass
+
+
+    def ispropertime(self, time: str) -> bool:
         fmt = '%I:%M %p'
         try:
             datetime.datetime.strptime(time, fmt)
