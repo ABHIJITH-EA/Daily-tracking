@@ -1,3 +1,7 @@
+""" Daily tracking data model """
+
+from database.driver.mysql import MysqlDb
+from database import connector
 
 class DailyTrackingModel:
     __table = 'daily_tracking'
@@ -15,4 +19,9 @@ class DailyTrackingModel:
 
     
     def __init__(self):
-        pass
+        self.mysql_db:MysqlDb = connector.connect(driver='mysql')
+
+
+    def list_data(self, start:int, end: int):
+        columns = [DailyTrackingModel.__day, DailyTrackingModel.__wakeup_time, DailyTrackingModel.__sleepy_time]
+        return self.mysql_db.select(DailyTrackingModel.__table, columns, end)

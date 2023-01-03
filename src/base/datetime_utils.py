@@ -39,6 +39,14 @@ def to_db_date(date_str: str, fmt: str = app_date_fmt):
         logger.error('Failed to convert date to DB date format')
 
 
+def to_app_datetime(datetime_str:str, fmt:str = '%d-%m-%Y %I:%M %p'):
+    try:
+        dt = datetime.strptime(datetime_str, fmt)
+        return datetime.strftime(app_datetime_fmt)
+    except ValueError as e:
+        logger.error('Failed to convert datetime to app datetime format')
+
+
 def current_datetime():
     now = datetime.now()
 

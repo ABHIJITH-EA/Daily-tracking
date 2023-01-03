@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QMainWindow
 from PyQt6 import QtWidgets
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
+from PyQt6 import QtCore
 
 from gui import config, utils
 from logger import logger
@@ -36,6 +37,8 @@ class HomeWindow(QMainWindow):
         self.income_controller = IncomeTrackingController()
         self.daily_tracking_controller = DailyTrackingController()
 
+        self.tracking_date = QtCore.QDate()
+
         self.create_ui()
 
     def create_ui(self):
@@ -47,10 +50,28 @@ class HomeWindow(QMainWindow):
 
         # self.day_input = QtWidgets.QLineEdit()
         # self.daily_tracking_box.addRow('Day', self.day_input)
+        self.tracking_date_layout = QtWidgets.QHBoxLayout()
+        self.tracking_date_label = QtWidgets.QLabel('Tracking date')
+        self.tracking_date_input = QtWidgets.QDateEdit()
+        self.tracking_date_input.setCalendarPopup(True)
+        self.tracking_date_input.setDate(self.tracking_date.currentDate())
+        self.tracking_date_layout.addWidget(self.tracking_date_label)
+        self.tracking_date_layout.addWidget(self.tracking_date_input)
+        self.daily_tracking_box.setLayout(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.tracking_date_layout)
+
         self.wakeup_time = QtWidgets.QLineEdit()
         self.daily_tracking_box.addRow('Wakeup time', self.wakeup_time)
         self.sleepy_time_input = QtWidgets.QLineEdit()
-        self.daily_tracking_box.addRow('Sleepy time', self.sleepy_time_input)
+        self.sleepy_time_date = QtWidgets.QDateEdit()
+        self.sleepy_time_date.setCalendarPopup(True)
+        self.sleepy_time_date.setDate(self.tracking_date.currentDate())
+        self.sleepy_time_box = QtWidgets.QHBoxLayout()
+        self.sleepy_time_label = QtWidgets.QLabel('Sleepy time')
+        self.sleepy_time_box.addWidget(self.sleepy_time_label)
+        self.sleepy_time_box.addWidget(self.sleepy_time_input)
+        self.sleepy_time_box.addWidget(self.sleepy_time_date)
+        self.daily_tracking_box.setLayout(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.sleepy_time_box)
+        # self.daily_tracking_box.addRow('Sleepy time', self.sleepy_time_input)
         self.daily_tracking_button_box = QtWidgets.QHBoxLayout()
         self.daily_tracking_save_btn = QtWidgets.QPushButton(
             'Save', self.daily_tracking_groupbox)
@@ -98,7 +119,7 @@ class HomeWindow(QMainWindow):
             3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.spent_tracking_button_box)
 
         self.daily_tracking_save_btn.clicked.connect(lambda: self.daily_tracking_controller.save(
-            [self.wakeup_time.text(), self.sleepy_time_input.text()]))
+            [self.tracking_date_input.date(), self.wakeup_time.text(), self.sleepy_time_input.text(), self.sleepy_time_date.date()]))
         self.income_tracking_save_btn.clicked.connect(lambda: self.income_controller.save(
             [self.income_amount_input.text(), self.income_remarks_input.text()]))
         self.spent_tracking_save_btn.clicked.connect(
@@ -106,3 +127,9 @@ class HomeWindow(QMainWindow):
 
         self.budget_tracking_layout.addWidget(self.income_tracking_groupbox)
         self.budget_tracking_layout.addWidget(self.spent_tracking_groupbox)
+
+
+    # def show_calendar(self):
+    #     clndr = QtWidgets.QCalendarWidget(self)
+
+    #     clndr.show()
