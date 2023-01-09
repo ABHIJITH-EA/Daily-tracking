@@ -21,4 +21,4 @@
 
 - CLI <img src="https://progress-bar.dev/60/" alt="drawing" style="width:60px;"/>
 
-- GUI <img src="https://progress-bar.dev/20/" alt="drawing" style="width:60px;"/>
+- GUI <img src="https://progress-bar.dev/30/" alt="drawing" style="width:60px;"/>
