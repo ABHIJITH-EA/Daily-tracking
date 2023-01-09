@@ -1,10 +1,9 @@
 """ """
 
 from PyQt6.QtWidgets import QMainWindow
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
-from PyQt6 import QtCore
 
 from gui import config, utils
 from logger import logger
@@ -33,103 +32,311 @@ class HomeWindow(QMainWindow):
         except FileNotFoundError as e:
             logger.warning(f'Cannot find stylesheet')
 
-        self.spent_controller = SpentTrackingController()
-        self.income_controller = IncomeTrackingController()
+        self.spent_tracking_controller = SpentTrackingController()
+        self.income_tracking_controller = IncomeTrackingController()
         self.daily_tracking_controller = DailyTrackingController()
 
         self.tracking_date = QtCore.QDate()
 
+        self.create_actions()
+        self.create_toolbar()
+        self.create_menubar()
         self.create_ui()
 
+
+    def create_actions(self):
+        exit_icon = utils.get_icon_path('exit_menu.png')
+        analysis_icon = utils.get_icon_path('analysis_window.png')
+
+        self.exit_action = QtGui.QAction('Exit', self)
+        self.exit_action.setIcon(QIcon(exit_icon))
+        self.exit_action.setShortcut(QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Quit))
+        self.exit_action.setWhatsThis('Exit app')
+        self.exit_action.triggered.connect(self.close_app)
+
+        self.analysis_action = QtGui.QAction(QIcon(analysis_icon), 'Analysis', self)
+
+
+    def create_toolbar(self):
+        self.app_toolbar = QtWidgets.QToolBar(self)
+        self.addAction(self.analysis_action)
+        self.addToolBar(self.app_toolbar)
+
+
+    def create_menubar(self):
+        self.app_menubar = self.menuBar()
+        self.file_menu = QtWidgets.QMenu('File', self)
+        self.edit_menu = QtWidgets.QMenu('Edit', self)
+        self.view_menu = QtWidgets.QMenu('View', self)
+        self.help_menu = QtWidgets.QMenu('Help', self)
+
+
+        self.app_menubar.addMenu(self.file_menu)
+        self.app_menubar.addMenu(self.edit_menu)
+        self.app_menubar.addMenu(self.view_menu)
+        self.app_menubar.addMenu(self.help_menu)
+
+        self.file_menu.addAction(self.exit_action)
+        
+        # Menu icons
+        save_icon = utils.get_icon_path('save_menu.png')
+        about_icon = utils.get_icon_path('about_menu.png')
+
+
     def create_ui(self):
-        self.daily_tracking_box = QtWidgets.QFormLayout()
-        self.daily_tracking_groupbox = QtWidgets.QGroupBox(
-            'Daily tracking', self.main_frame)
-        self.daily_tracking_groupbox.setLayout(self.daily_tracking_box)
-        self.central_layout.addWidget(self.daily_tracking_groupbox)
+        # Daily tracking frame
+        self.daily_tracking_frame = QtWidgets.QFrame(self.main_frame)
+        self.daily_tracking_frame.setObjectName('Daily-tracking-frame')
 
-        # self.day_input = QtWidgets.QLineEdit()
-        # self.daily_tracking_box.addRow('Day', self.day_input)
-        self.tracking_date_layout = QtWidgets.QHBoxLayout()
-        self.tracking_date_label = QtWidgets.QLabel('Tracking date')
-        self.tracking_date_input = QtWidgets.QDateEdit()
-        self.tracking_date_input.setCalendarPopup(True)
-        self.tracking_date_input.setDate(self.tracking_date.currentDate())
-        self.tracking_date_layout.addWidget(self.tracking_date_label)
-        self.tracking_date_layout.addWidget(self.tracking_date_input)
-        self.daily_tracking_box.setLayout(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.tracking_date_layout)
-
-        self.wakeup_time = QtWidgets.QLineEdit()
-        self.daily_tracking_box.addRow('Wakeup time', self.wakeup_time)
-        self.sleepy_time_input = QtWidgets.QLineEdit()
-        self.sleepy_time_date = QtWidgets.QDateEdit()
-        self.sleepy_time_date.setCalendarPopup(True)
-        self.sleepy_time_date.setDate(self.tracking_date.currentDate())
-        self.sleepy_time_box = QtWidgets.QHBoxLayout()
+        self.daily_tracking_frame_layout = QtWidgets.QHBoxLayout(self.daily_tracking_frame)
+        self.daily_tracking_box = QtWidgets.QFrame(self.daily_tracking_frame)
+        self.daily_tracking_box.setObjectName('Daily-tracking-box')
+        self.daily_tracking_box_layout = QtWidgets.QVBoxLayout(self.daily_tracking_box)
+        self.daily_tracking_box_layout.setSpacing(25)
+        self.daily_tracking_box_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.daily_tracking_box_title = QtWidgets.QLabel('Daily tracking')
+        self.daily_tracking_box_title.setObjectName('daily-tracking-box-title')
+        self.daily_tracking_input_box = QtWidgets.QFrame(self.daily_tracking_box)
+        self.daily_tracking_input_box.setObjectName('daily-tracking-input-box')
+        self.daily_tracking_input_box_layout = QtWidgets.QFormLayout(self.daily_tracking_input_box)
+        self.daily_tracking_date_label = QtWidgets.QLabel('Tracking date')
+        self.daily_tracking_date_label.setObjectName('daily-tracking-date-label')
+        self.daily_tracking_date_picker = QtWidgets.QDateEdit()
+        self.daily_tracking_date_picker.setObjectName('daily-tracking-date-picker')
+        self.daily_tracking_date_picker.setCalendarPopup(True)
+        self.wakeup_time_label = QtWidgets.QLabel('Wakeup time')
+        self.wakeup_time_label.setObjectName('wakeup-time-label')
+        self.wakeup_time_input = QtWidgets.QLineEdit()
+        self.wakeup_time_input.setObjectName('wakeup-time-input')
         self.sleepy_time_label = QtWidgets.QLabel('Sleepy time')
-        self.sleepy_time_box.addWidget(self.sleepy_time_label)
-        self.sleepy_time_box.addWidget(self.sleepy_time_input)
-        self.sleepy_time_box.addWidget(self.sleepy_time_date)
-        self.daily_tracking_box.setLayout(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.sleepy_time_box)
-        # self.daily_tracking_box.addRow('Sleepy time', self.sleepy_time_input)
-        self.daily_tracking_button_box = QtWidgets.QHBoxLayout()
-        self.daily_tracking_save_btn = QtWidgets.QPushButton(
-            'Save', self.daily_tracking_groupbox)
-        self.daily_tracking_button_box.addWidget(
-            self.daily_tracking_save_btn, 0, Qt.AlignmentFlag.AlignRight)
-        self.daily_tracking_box.setLayout(
-            3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.daily_tracking_button_box)
+        self.sleepy_time_label.setObjectName('sleepy-time-label')
+        self.sleepy_input_box = QtWidgets.QHBoxLayout()
+        self.sleepy_time_input = QtWidgets.QLineEdit()
+        self.sleepy_time_input.setObjectName('sleepy-time-input')
+        self.sleepy_date_input = QtWidgets.QDateEdit()
+        self.sleepy_date_input.setObjectName('sleepy-date-input')
+        self.sleepy_date_input.setCalendarPopup(True)
+        self.sleepy_input_box.addWidget(self.sleepy_time_input)
+        self.sleepy_input_box.addWidget(self.sleepy_date_input)
+        self.daily_tracking_button_box = QtWidgets.QFrame(self.daily_tracking_input_box)
+        self.daily_tracking_button_box.setObjectName('daily-tracking-button-box')
+        self.daily_tracking_button_box_layout = QtWidgets.QHBoxLayout(self.daily_tracking_button_box)
+        self.daily_tracking_button_box_layout.setSpacing(8)
+        self.daily_tracking_button_box_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.daily_tracking_save_btn = QtWidgets.QPushButton('Save')
+        self.daily_tracking_save_btn.setObjectName('daily-tracking-save-btn')
+        self.daily_tracking_clear_btn = QtWidgets.QPushButton('Clear')
+        self.daily_tracking_clear_btn.setObjectName('daily-tracking-clear-btn')
+        self.daily_tracking_button_box_layout.addWidget(self.daily_tracking_clear_btn)
+        self.daily_tracking_button_box_layout.addWidget(self.daily_tracking_save_btn)
 
-        self.budget_tracking_groupbox = QtWidgets.QGroupBox(
-            'Budget tracking', self.main_frame)
-        self.budget_tracking_layout = QtWidgets.QHBoxLayout()
-        self.budget_tracking_groupbox.setLayout(self.budget_tracking_layout)
-        self.central_layout.addWidget(self.budget_tracking_groupbox)
+        self.daily_tracking_input_box_layout.addRow(self.daily_tracking_date_label,
+                                                self.daily_tracking_date_picker)
+        self.daily_tracking_input_box_layout.addRow(self.wakeup_time_label, self.wakeup_time_input)
+        self.daily_tracking_input_box_layout.addRow(self.sleepy_time_label, self.sleepy_input_box)                           
+        self.daily_tracking_box_layout.addWidget(self.daily_tracking_box_title)
+        self.daily_tracking_box_layout.addWidget(self.daily_tracking_input_box)
+        self.daily_tracking_box_layout.addWidget(self.daily_tracking_button_box)
 
-        self.income_tracking_box = QtWidgets.QFormLayout()
-        self.income_tracking_groupbox = QtWidgets.QGroupBox(
-            'Income tracking', self.budget_tracking_groupbox)
-        self.income_tracking_groupbox.setLayout(self.income_tracking_box)
-        self.income_amount_input = QtWidgets.QLineEdit()
-        self.income_tracking_box.addRow('Amount', self.income_amount_input)
-        self.income_remarks_input = QtWidgets.QLineEdit()
-        self.income_tracking_box.addRow('Remarks', self.income_remarks_input)
-        self.income_tracking_button_box = QtWidgets.QHBoxLayout()
-        self.income_tracking_save_btn = QtWidgets.QPushButton(
-            'Save', self.income_tracking_groupbox)
-        self.income_tracking_button_box.addWidget(
-            self.income_tracking_save_btn, 0, Qt.AlignmentFlag.AlignRight)
-        self.income_tracking_box.setLayout(
-            3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.income_tracking_button_box)
+        # Daily tracking view
+        self.daily_tracking_view_box = QtWidgets.QFrame(self.daily_tracking_frame)
+        self.daily_tracking_view_box.setObjectName('Daily-tracking-view-box')
+        self.daily_tracking_view_box_layout = QtWidgets.QVBoxLayout(self.daily_tracking_view_box)
+        self.daily_tracking_view_box_title = QtWidgets.QLabel('Daily tracking data')
+        self.daily_tracking_view_box_title.setObjectName('daily-tracking-view-box-title')
+        self.daily_tracking_view_table = QtWidgets.QTableWidget(self.daily_tracking_view_box)
+        self.daily_tracking_view_table.setObjectName('daily-tracking-view-table')
+        self.daily_tracking_view_table.setColumnCount(3)
+        self.daily_tracking_view_table_header = self.daily_tracking_view_table.horizontalHeader()
+        self.daily_tracking_view_table_header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.daily_tracking_view_table.setHorizontalHeaderLabels(['Date', 'Wakeup time', 'Sleepy time'])
 
-        self.spent_tracking_box = QtWidgets.QFormLayout()
-        self.spent_tracking_groupbox = QtWidgets.QGroupBox(
-            'Spent tracking', self.budget_tracking_groupbox)
-        self.spent_tracking_groupbox.setLayout(self.spent_tracking_box)
+        for data in self.daily_tracking_controller.show_data(1, 10):
+            rows = self.daily_tracking_view_table.rowCount()
+            self.daily_tracking_view_table.setRowCount(rows + 1)
+            self.daily_tracking_view_table.setItem(rows, 0, QtWidgets.QTableWidgetItem(data[0]))
+            self.daily_tracking_view_table.setItem(rows, 1, QtWidgets.QTableWidgetItem(data[1]))
+            self.daily_tracking_view_table.setItem(rows, 2, QtWidgets.QTableWidgetItem(data[2]))
+        self.daily_tracking_view_table.resizeColumnsToContents()
+        self.daily_tracking_view_box_layout.addWidget(self.daily_tracking_view_box_title)
+        self.daily_tracking_view_box_layout.addWidget(self.daily_tracking_view_table)
+        
+        self.daily_tracking_frame_layout.addWidget(self.daily_tracking_box)
+        self.daily_tracking_frame_layout.addWidget(self.daily_tracking_view_box)
+
+        # =====
+
+        # Budget tracking frame
+        self.budget_tracking_frame = QtWidgets.QFrame(self.main_frame)
+        self.budget_tracking_frame.setObjectName('Budget-tracking-frame')
+        self.budget_tracking_frame_layout = QtWidgets.QHBoxLayout(self.budget_tracking_frame)
+
+        self.spent_tracking_frame = QtWidgets.QFrame()
+        self.spent_tracking_frame.setObjectName('spent-tracking-frame')
+        self.spent_tracking_frame_layout = QtWidgets.QHBoxLayout(self.spent_tracking_frame)
+        self.spent_tracking_box = QtWidgets.QFrame(self.spent_tracking_frame)
+        self.spent_tracking_box.setObjectName('spent-tracking-box')
+        self.spent_tracking_box_layout = QtWidgets.QVBoxLayout(self.spent_tracking_box)
+        self.spent_tracking_box_layout.setSpacing(25)
+        self.spent_tracking_box_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.spent_tracking_box_title = QtWidgets.QLabel('Spent tracking')
+        self.spent_tracking_input_box = QtWidgets.QFrame(self.spent_tracking_box)
+        self.spent_tracking_input_box_layout = QtWidgets.QFormLayout(self.spent_tracking_input_box)
+        self.spent_amount_label = QtWidgets.QLabel('Amount')
+        self.spent_amount_label.setObjectName('spent-amount-label')
         self.spent_amount_input = QtWidgets.QLineEdit()
-        self.spent_tracking_box.addRow('Amount', self.spent_amount_input)
-        self.spent_remarks_input = QtWidgets.QLineEdit()
-        self.spent_tracking_box.addRow('Remarks', self.spent_remarks_input)
-        self.spent_tracking_button_box = QtWidgets.QHBoxLayout()
-        self.spent_tracking_save_btn = QtWidgets.QPushButton(
-            'Save', self.spent_tracking_groupbox)
-        self.spent_tracking_button_box.addWidget(
-            self.spent_tracking_save_btn, 0, Qt.AlignmentFlag.AlignRight)
-        self.spent_tracking_box.setLayout(
-            3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.spent_tracking_button_box)
+        self.spent_amount_input.setObjectName('spent-amount-input')
+        self.spent_amount_remakrs_label = QtWidgets.QLabel('Remarks')
+        self.spent_amount_remakrs_label.setObjectName('spent-amount-remakrs-label')
+        self.spent_amount_remakrs_input = QtWidgets.QLineEdit()
+        self.spent_amount_remakrs_input.setObjectName('spent-amount-remakrs-input')
+        self.spent_tracking_input_box_layout.addRow(self.spent_amount_label,
+                                                self.spent_amount_input)
+        self.spent_tracking_input_box_layout.addRow(self.spent_amount_remakrs_label,
+                                                self.spent_amount_remakrs_input)
+        self.spent_tracking_button_box = QtWidgets.QFrame(self.spent_tracking_box)
+        self.spent_tracking_button_box.setObjectName('spent-tracking-button-box')
+        self.spent_tracking_button_box_layout = QtWidgets.QHBoxLayout(self.spent_tracking_button_box)
+        self.spent_tracking_button_box_layout.setSpacing(8)
+        self.spent_tracking_button_box_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.spent_tracking_save_btn = QtWidgets.QPushButton('Save')
+        self.spent_tracking_save_btn.setObjectName('spent-tracking-save-btn')
+        self.spent_tracking_save_btn.clicked.connect(self.confirm_save)
+        self.spent_tracking_clear_btn = QtWidgets.QPushButton('Clear')
+        self.spent_tracking_clear_btn.setObjectName('spent-tracking-clear-btn')
+        self.spent_tracking_button_box_layout.addWidget(self.spent_tracking_clear_btn)
+        self.spent_tracking_button_box_layout.addWidget(self.spent_tracking_save_btn)
 
-        self.daily_tracking_save_btn.clicked.connect(lambda: self.daily_tracking_controller.save(
-            [self.tracking_date_input.date(), self.wakeup_time.text(), self.sleepy_time_input.text(), self.sleepy_time_date.date()]))
-        self.income_tracking_save_btn.clicked.connect(lambda: self.income_controller.save(
-            [self.income_amount_input.text(), self.income_remarks_input.text()]))
-        self.spent_tracking_save_btn.clicked.connect(
-            lambda: self.spent_controller.save([self.spent_amount_input.text(), self.spent_remarks_input.text()]))
+        self.spent_tracking_box_layout.addWidget(self.spent_tracking_box_title)
+        self.spent_tracking_box_layout.addWidget(self.spent_tracking_input_box)
+        self.spent_tracking_box_layout.addWidget(self.spent_tracking_button_box)
 
-        self.budget_tracking_layout.addWidget(self.income_tracking_groupbox)
-        self.budget_tracking_layout.addWidget(self.spent_tracking_groupbox)
+        # Spent view
+        self.spent_tracking_view_box = QtWidgets.QFrame(self.spent_tracking_frame)
+        self.spent_tracking_view_box.setObjectName('spent-tracking-view-box')
+        self.spent_tracking_view_box_layout = QtWidgets.QVBoxLayout(self.spent_tracking_view_box)
+        self.spent_tracking_view_box_title = QtWidgets.QLabel('Spent tracking data')
+        self.spent_tracking_view_box_title.setObjectName('spent-tracking-view-box-title')
+        self.spent_tracking_view_box_filter_box = QtWidgets.QFrame(self.spent_tracking_view_box)
+        self.spent_tracking_view_box_filter_box.setObjectName('spent-tracking-view-box-filter-box')
+        self.spent_tracking_view_box_filter_box_layout = QtWidgets.QHBoxLayout(self.spent_tracking_view_box_filter_box)
+        self.spent_tracking_view_box_month_filter_label = QtWidgets.QLabel('Month')
+        self.spent_tracking_view_box_month_filter_label.setObjectName('spent-tracking-view--box-month-filter-label')
+        self.spent_tracking_view_box_month_filter_input = QtWidgets.QComboBox(self.spent_tracking_view_box_filter_box)
+        self.spent_tracking_view_box_month_filter_input.setObjectName('spent-tracking-view-box-month-filter-input')
+        self.spent_tracking_view_box_year_filter_label = QtWidgets.QLabel('Year')
+        self.spent_tracking_view_box_year_filter_label.setObjectName('spent-tracking-view--box-year-filter-label')
+        self.spent_tracking_view_box_year_filter_input = QtWidgets.QComboBox(self.spent_tracking_view_box_filter_box)
+        self.spent_tracking_view_box_year_filter_input.setObjectName('spent-tracking-view-box-year-filter-input')
+        self.spent_tracking_view_box_filter_box_layout.addWidget(self.spent_tracking_view_box_month_filter_label)
+        self.spent_tracking_view_box_filter_box_layout.addWidget(self.spent_tracking_view_box_month_filter_input)
+        self.spent_tracking_view_box_filter_box_layout.addWidget(self.spent_tracking_view_box_year_filter_label)
+        self.spent_tracking_view_box_filter_box_layout.addWidget(self.spent_tracking_view_box_year_filter_input)
+        self.spent_tracking_view_box_table = QtWidgets.QTableWidget(self.spent_tracking_view_box)
+        self.spent_tracking_view_box_table.setObjectName('spent-tracking-view-box-table')
+        self.spent_tracking_view_box_table.setColumnCount(2)
+        self.spent_tracking_view_box_table_header = self.spent_tracking_view_box_table.horizontalHeader()
+        self.spent_tracking_view_box_table_header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.spent_tracking_view_box_table.setHorizontalHeaderLabels(['Amount', 'Remarks'])
+        self.spent_tracking_view_box_table.setWordWrap(True)
+        for data in self.spent_tracking_controller.show_data(1, 10):
+            rows = self.spent_tracking_view_box_table.rowCount()
+            self.spent_tracking_view_box_table.setRowCount(rows + 1)
+            self.spent_tracking_view_box_table.setItem(rows, 0, QtWidgets.QTableWidgetItem(str(data[0])))
+            self.spent_tracking_view_box_table.setItem(rows, 1, QtWidgets.QTableWidgetItem(data[1]))
+        self.spent_tracking_view_box_table.resizeColumnsToContents()
+        self.spent_tracking_view_box_table.resizeRowsToContents()
+
+        self.spent_tracking_view_box_layout.addWidget(self.spent_tracking_view_box_title)
+        self.spent_tracking_view_box_layout.addWidget(self.spent_tracking_view_box_filter_box)
+        self.spent_tracking_view_box_layout.addWidget(self.spent_tracking_view_box_table)
 
 
-    # def show_calendar(self):
-    #     clndr = QtWidgets.QCalendarWidget(self)
+        self.spent_tracking_frame_layout.addWidget(self.spent_tracking_box)
+        self.spent_tracking_frame_layout.addWidget(self.spent_tracking_view_box)
 
-    #     clndr.show()
+        self.income_tracking_frame = QtWidgets.QFrame()
+        self.income_tracking_frame.setObjectName('income-tracking-frame')
+        self.income_tracking_frame_layout = QtWidgets.QHBoxLayout(self.income_tracking_frame)
+        self.income_tracking_box = QtWidgets.QFrame(self.income_tracking_frame)
+        self.income_tracking_box.setObjectName('income-tracking-box')
+        self.income_tracking_box_layout = QtWidgets.QVBoxLayout(self.income_tracking_box)
+        self.income_tracking_box_layout.setSpacing(25)
+        self.income_tracking_box_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.income_tracking_box_title = QtWidgets.QLabel('Income tracking')
+        self.income_tracking_box_title.setObjectName('income-tracking-box-title')
+        self.income_tracking_input_box = QtWidgets.QFrame(self.income_tracking_box)
+        self.income_tracking_input_box_layout = QtWidgets.QFormLayout(self.income_tracking_input_box)
+        self.income_amount_label = QtWidgets.QLabel('Amount')
+        self.income_amount_label.setObjectName('income-amount-label')
+        self.income_amount_input = QtWidgets.QLineEdit()
+        self.income_amount_input.setObjectName('income-amount-input')
+        self.income_amount_remarks_label = QtWidgets.QLabel('Remarks')
+        self.income_amount_remarks_label.setObjectName('income-amount-remarks-label')
+        self.income_amount_remarks_input = QtWidgets.QLineEdit()
+        self.income_amount_remarks_input.setObjectName('income-amount-remarks-input')
+        self.income_tracking_input_box_layout.addRow(self.income_amount_label,
+                                                self.income_amount_input)
+        self.income_tracking_input_box_layout.addRow(self.income_amount_remarks_label,
+                                                self.income_amount_remarks_input)
+        self.income_tracking_button_box = QtWidgets.QFrame(self.income_tracking_box)
+        self.income_tracking_button_box.setObjectName('income-tracking-button-box')
+        self.income_tracking_button_box_layout = QtWidgets.QHBoxLayout(self.income_tracking_button_box)
+        self.income_tracking_button_box_layout.setSpacing(8)
+        self.income_tracking_button_box_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.income_tracking_save_btn = QtWidgets.QPushButton('Save')
+        self.income_tracking_save_btn.setObjectName('income-tracking-save-btn')
+        self.income_tracking_clear_btn = QtWidgets.QPushButton('Clear')
+        self.income_tracking_clear_btn.setObjectName('income-tracking-clear-btn')
+        self.income_tracking_button_box_layout.addWidget(self.income_tracking_clear_btn)
+        self.income_tracking_button_box_layout.addWidget(self.income_tracking_save_btn)
+
+        self.income_tracking_box_layout.addWidget(self.income_tracking_box_title)
+        self.income_tracking_box_layout.addWidget(self.income_tracking_input_box)
+        self.income_tracking_box_layout.addWidget(self.income_tracking_button_box)
+
+        # Income tracking view box
+        self.income_tracking_view_box = QtWidgets.QFrame()
+        self.income_tracking_view_box.setObjectName('income-tracking-view-box')
+        self.income_tracking_view_box_layout = QtWidgets.QVBoxLayout(self.income_tracking_view_box)
+        self.income_tracking_view_box_title = QtWidgets.QLabel('Income tracking data')
+        self.income_tracking_view_box_title.setObjectName('income-tracking-view-box-title')
+        self.income_tracking_view_box_table = QtWidgets.QTableWidget(self.income_tracking_view_box)
+        self.income_tracking_view_box_table.setObjectName('income-tracking-view-box-table')
+        self.income_tracking_view_box_table.setColumnCount(2)
+        self.income_tracking_view_box_table_hader = self.income_tracking_view_box_table.horizontalHeader()
+        self.income_tracking_view_box_table_hader.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.income_tracking_view_box_table.setHorizontalHeaderLabels(['Amount', 'Remarks'])
+        for data in self.income_tracking_controller.show_data(1, 10):
+            rows = self.income_tracking_view_box_table.rowCount()
+            self.income_tracking_view_box_table.setRowCount(rows + 1)
+            self.income_tracking_view_box_table.setItem(rows, 0, QtWidgets.QTableWidgetItem(str(data[0])))
+            self.income_tracking_view_box_table.setItem(rows, 1, QtWidgets.QTableWidgetItem(data[1]))
+        self.income_tracking_view_box_table.resizeColumnsToContents()
+        self.income_tracking_view_box_layout.addWidget(self.income_tracking_view_box_title)
+        self.income_tracking_view_box_layout.addWidget(self.income_tracking_view_box_table)
+
+        self.income_tracking_frame_layout.addWidget(self.income_tracking_box)
+        self.income_tracking_frame_layout.addWidget(self.income_tracking_view_box)
+
+
+        self.budget_tracking_frame_layout.addWidget(self.spent_tracking_frame)
+        self.budget_tracking_frame_layout.addWidget(self.income_tracking_frame)
+
+        # =====
+
+        self.central_layout.addWidget(self.daily_tracking_frame)
+        self.central_layout.addWidget(self.budget_tracking_frame)
+
+
+    def close_app(self):
+        self.close()
+
+
+    def confirm_save(self):
+        confirm_box = QtWidgets.QMessageBox(self)
+        confirm_box.setWindowTitle('Spent tracking')
+        confirm_box.setMinimumHeight(1200)
+        confirm_box.setInformativeText('Do you want to save the spent tracking')
+
+        confirm_box.show()

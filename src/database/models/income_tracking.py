@@ -36,6 +36,11 @@ class IncomeTrackingModel(BudgetTrackingModel):
         return status
 
 
+    def list_data(self, start: int, end: int):
+        columns = [IncomeTrackingModel.__amount, IncomeTrackingModel.__remarks]
+        return self.mysql_db.select(IncomeTrackingModel.__table, columns, end)
+
+
     def _all_columns(self) -> list:
         """ Get all the attributes of the table
         """

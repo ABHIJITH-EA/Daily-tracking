@@ -35,3 +35,20 @@ class IncomeTracking(BudgetTracking):
 
         logger.info('Income data saved successfully')
         return True
+
+
+    def show_spent_tracking_data(self, start: int = 1, end: int = 10):
+        tracking_list = self.model.list_data(start, end)
+        tracking_list_data = []
+
+        if len(tracking_list) == 0:
+            return None
+
+        for item in tracking_list:
+            item_list = []
+            item_list.append(item[0])
+            item_list.append(item[1])
+
+            tracking_list_data.append(item_list)
+
+        return tracking_list_data

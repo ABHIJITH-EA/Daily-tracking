@@ -33,3 +33,7 @@ class DailyTrackingController:
             return False
             
         return pool.daily_tracking_api.save_tracking_data(processed_data)
+
+
+    def show_data(self, start: int, end: int):
+        return pool.daily_tracking_api.show_daily_tracking_data(start, end)

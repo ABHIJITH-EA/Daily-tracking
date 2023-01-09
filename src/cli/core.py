@@ -60,12 +60,8 @@ def application_menu() -> None:
 # Debugger for the cli system
 def debugger():
     import pool
-    if not pool.check_status():
-        print('Failed API connection')
-    else:
-        print('API active')
+    
 
-    if pool.spent_tracking_api.delete_spent_data(9):
-        print('DELETE SUCESSFULL')
-    else:
-        print('DELETE FAILED')
+    data = pool.spent_tracking_api.show_spent_tracking_data(1, 3)
+
+    print(data)

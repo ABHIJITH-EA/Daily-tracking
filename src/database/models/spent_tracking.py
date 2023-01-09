@@ -43,6 +43,12 @@ class SpentTrackingModel(BudgetTrackingModel):
 
         return status
 
+
+    def list_data(self, start: int, end: int):
+        columns = [SpentTrackingModel.__amount, SpentTrackingModel.__remarks]
+        return self.mysql_db.select(SpentTrackingModel.__table, columns, end)
+
+
     def _all_columns(self) -> list:
         """ Get all the attributes of the table
         """
