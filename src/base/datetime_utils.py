@@ -82,3 +82,7 @@ def current_date():
 
 def yesterday_date():
     pass
+
+
+def add_date(date_str: date, count: int):
+    pass

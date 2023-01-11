@@ -2,7 +2,8 @@
 
 from database import connector
 from base.datetime_utils import (current_datetime, to_db_datetime, to_db_time,\
-                            to_db_date, to_app_date, db_time_to_app_time, to_app_datetime)
+                            to_db_date, to_app_date, db_time_to_app_time, to_app_datetime,\
+                            current_date)
 from api.validations.daily_tracking import DailyTrackingValidation
 from database.models.daily_tracking import DailyTrackingModel
 
@@ -46,6 +47,27 @@ class DailyTracking:
         else:
             logger.info('Daily tracking data saved successfully')
             return True
+
+
+    def save_wakeup_time(self, data: list):
+        fmt = '%I:%M %p'
+        day = to_db_date(current_date())
+        wakeup_time = to_db_date(data[0], fmt)
+        sleepy_time = ''
+
+        created_at = updated_at = to_db_datetime(current_datetime())
+
+        values = [day, wakeup_time, sleepy_time, created_at, updated_at]
+
+        result = self.model.save_tracking_data(values)
+
+        if not result:
+            logger.info('Failed to save wakeup time')
+            return False
+        else:
+            logger.info('Wakeup time saved successfully')
+            return True
+
 
     def update_wakeup_time(self, wake_time: str) -> None:
         pass

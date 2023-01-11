@@ -10,6 +10,8 @@ from logger import logger
 from gui.controllers.spent_tracking_controller import SpentTrackingController
 from gui.controllers.income_tracking_controller import IncomeTrackingController
 from gui.controllers.daily_tracking_controller import DailyTrackingController
+from gui.views.about_window import AboutWindow
+from gui.views.planner_window import PlannerWindow
 
 
 class HomeWindow(QMainWindow):
@@ -47,19 +49,42 @@ class HomeWindow(QMainWindow):
     def create_actions(self):
         exit_icon = utils.get_icon_path('exit_menu.png')
         analysis_icon = utils.get_icon_path('analysis_window.png')
-
+        backup_icon = utils.get_icon_path('backup_window.png')
+        save_icon = utils.get_icon_path('save_menu.png')
+        about_icon = utils.get_icon_path('about_menu.png')
+        planner_icon = utils.get_icon_path('planner_window.png')
+        
         self.exit_action = QtGui.QAction('Exit', self)
         self.exit_action.setIcon(QIcon(exit_icon))
         self.exit_action.setShortcut(QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Quit))
         self.exit_action.setWhatsThis('Exit app')
         self.exit_action.triggered.connect(self.close_app)
 
-        self.analysis_action = QtGui.QAction(QIcon(analysis_icon), 'Analysis', self)
+        self.about_action = QtGui.QAction('About', self)
+        self.about_action.setIcon(QIcon(about_icon))
+        self.about_action.triggered.connect(self.open_about_window)
+
+        # Toolbar actions
+        self.analysis_action = QtGui.QAction('Analysis', self)
+        self.analysis_action.setIcon(QIcon(analysis_icon))
+        self.about_action.setWhatsThis('About the application')
+
+        self.backup_action = QtGui.QAction('Backup', self)
+        self.backup_action.setIcon(QIcon(backup_icon))
+
+        self.planner_action = QtGui.QAction('Planner', self)
+        self.planner_action.setIcon(QIcon(planner_icon))
+        self.planner_action.triggered.connect(self.open_planner_window)
 
 
     def create_toolbar(self):
-        self.app_toolbar = QtWidgets.QToolBar(self)
-        self.addAction(self.analysis_action)
+        self.app_toolbar = QtWidgets.QToolBar('Exit', self)
+        self.app_toolbar.setIconSize(QtCore.QSize(30, 30))
+        self.app_toolbar.layout().setSpacing(20)
+
+        self.app_toolbar.addAction(self.analysis_action)
+        self.app_toolbar.addAction(self.backup_action)
+        self.app_toolbar.addAction(self.planner_action)
         self.addToolBar(self.app_toolbar)
 
 
@@ -77,10 +102,7 @@ class HomeWindow(QMainWindow):
         self.app_menubar.addMenu(self.help_menu)
 
         self.file_menu.addAction(self.exit_action)
-        
-        # Menu icons
-        save_icon = utils.get_icon_path('save_menu.png')
-        about_icon = utils.get_icon_path('about_menu.png')
+        self.help_menu.addAction(self.about_action)      
 
 
     def create_ui(self):
@@ -133,10 +155,22 @@ class HomeWindow(QMainWindow):
         self.daily_tracking_input_box_layout.addRow(self.daily_tracking_date_label,
                                                 self.daily_tracking_date_picker)
         self.daily_tracking_input_box_layout.addRow(self.wakeup_time_label, self.wakeup_time_input)
-        self.daily_tracking_input_box_layout.addRow(self.sleepy_time_label, self.sleepy_input_box)                           
+        self.daily_tracking_input_box_layout.addRow(self.sleepy_time_label, self.sleepy_input_box)
+
+        self.daily_tracking_sub_box = QtWidgets.QFrame(self.daily_tracking_box)
+        self.daily_tracking_sub_box_layout = QtWidgets.QVBoxLayout(self.daily_tracking_sub_box)
+        self.current_day_wakeup_time_box = QtWidgets.QFrame(self.daily_tracking_sub_box)
+        self.current_day_wakeup_time_box_layout = QtWidgets.QFormLayout(self.current_day_wakeup_time_box)
+        self.current_day_wakeup_time_label = QtWidgets.QLabel('Latest wakeup time')
+        self.current_day_wakeup_time_input = QtWidgets.QLineEdit()
+        self.current_day_wakeup_time_box_layout.addRow(self.current_day_wakeup_time_label,
+                                                self.current_day_wakeup_time_input)
+        self.daily_tracking_sub_box_layout.addWidget(self.current_day_wakeup_time_box)
+
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_box_title)
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_input_box)
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_button_box)
+        self.daily_tracking_box_layout.addWidget(self.daily_tracking_sub_box)
 
         # Daily tracking view
         self.daily_tracking_view_box = QtWidgets.QFrame(self.daily_tracking_frame)
@@ -151,7 +185,7 @@ class HomeWindow(QMainWindow):
         self.daily_tracking_view_table_header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.daily_tracking_view_table.setHorizontalHeaderLabels(['Date', 'Wakeup time', 'Sleepy time'])
 
-        for data in self.daily_tracking_controller.show_data(1, 10):
+        for data in self.daily_tracking_controller.show_data(1, 15):
             rows = self.daily_tracking_view_table.rowCount()
             self.daily_tracking_view_table.setRowCount(rows + 1)
             self.daily_tracking_view_table.setItem(rows, 0, QtWidgets.QTableWidgetItem(data[0]))
@@ -239,7 +273,7 @@ class HomeWindow(QMainWindow):
         self.spent_tracking_view_box_table_header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.spent_tracking_view_box_table.setHorizontalHeaderLabels(['Amount', 'Remarks'])
         self.spent_tracking_view_box_table.setWordWrap(True)
-        for data in self.spent_tracking_controller.show_data(1, 10):
+        for data in self.spent_tracking_controller.show_data(1, 30):
             rows = self.spent_tracking_view_box_table.rowCount()
             self.spent_tracking_view_box_table.setRowCount(rows + 1)
             self.spent_tracking_view_box_table.setItem(rows, 0, QtWidgets.QTableWidgetItem(str(data[0])))
@@ -307,7 +341,7 @@ class HomeWindow(QMainWindow):
         self.income_tracking_view_box_table_hader = self.income_tracking_view_box_table.horizontalHeader()
         self.income_tracking_view_box_table_hader.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.income_tracking_view_box_table.setHorizontalHeaderLabels(['Amount', 'Remarks'])
-        for data in self.income_tracking_controller.show_data(1, 10):
+        for data in self.income_tracking_controller.show_data(1, 15):
             rows = self.income_tracking_view_box_table.rowCount()
             self.income_tracking_view_box_table.setRowCount(rows + 1)
             self.income_tracking_view_box_table.setItem(rows, 0, QtWidgets.QTableWidgetItem(str(data[0])))
@@ -340,3 +374,15 @@ class HomeWindow(QMainWindow):
         confirm_box.setInformativeText('Do you want to save the spent tracking')
 
         confirm_box.show()
+
+
+    # Should make this as modal
+    def open_about_window(self):
+        self.about_window = AboutWindow()
+        self.about_window.show()
+
+    
+    def open_planner_window(self):
+        self.planner_window = PlannerWindow()
+        self.planner_window.show()
+        

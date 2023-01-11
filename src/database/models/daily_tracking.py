@@ -22,6 +22,12 @@ class DailyTrackingModel:
         self.mysql_db:MysqlDb = connector.connect(driver='mysql')
 
 
+    def save_tracking_data(self, values: list):
+        columns = [DailyTrackingModel.__day, DailyTrackingModel.__wakeup_time, DailyTrackingModel.__sleepy_time,
+                    DailyTrackingModel.__created_at, DailyTrackingModel.__updated_at]
+        return self.mysql_db.insert_value(DailyTrackingModel.__table, columns, values)
+
+
     def list_data(self, start:int, end: int):
         columns = [DailyTrackingModel.__day, DailyTrackingModel.__wakeup_time, DailyTrackingModel.__sleepy_time]
         return self.mysql_db.select(DailyTrackingModel.__table, columns, end)
