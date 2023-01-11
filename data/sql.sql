@@ -84,14 +84,14 @@ CREATE TABLE `month_plan`
     `updated_by` VARCHAR(45) DEFAULT 'system',
     `deleated_at` DATETIME,
     `deleated_by` VARCHAR(45),
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`)
 );
 
 -- Table for week planning
 CREATE TABLE `week_plan`
 (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'primary key',
-    `month_id` INT,
+    `month_id` INT UNSIGNED,
     `start_date` DATE NOT NULL COMMENT 'Start date of the week planned actions',
     `end_date` DATE NOT NULL COMMENT 'End date of the week planned actions',
     `goal` VARCHAR(512) NOT NULL COMMENT 'Goals of the week',
