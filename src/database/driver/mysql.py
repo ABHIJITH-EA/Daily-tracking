@@ -86,7 +86,7 @@ class MysqlDb(object):
         return self.cursor.fetchmany(limit)
 
 
-    def select_where(self, table:str, columns: str, where_colum: str, value: str) -> WhereCondition:
+    def select_where(self, table:str, columns: list, where_colum: str, value: str) -> WhereCondition:
         columns = ','.join(columns)
         statement = f"SELECT {columns} FROM {table} WHERE {where_colum} = '{value}'"
 

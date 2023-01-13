@@ -2,7 +2,7 @@
 
 import sys
 import sqlite3
-from sqlite3 import OperationalError
+from sqlite3 import OperationalError, DatabaseError
 from database.config import SQLITEDB_PATH
 from logger import logger
 from base.constants import General
@@ -24,10 +24,16 @@ class SqliteDb(object):
 
 
     def execute(self, statement: str, commit=False, get=False):
-        self.cursor.execute(statement)
+        try:
+            self.cursor.execute(statement)
+        except DatabaseError as e:
+            logger.debug(statement)
+            logger.error(e)
+            return False
 
         if commit:
-            self.connection.commit()
+                self.connection.commit()
+                return True
 
         if get:
             ouput = self.cursor.fetchall()

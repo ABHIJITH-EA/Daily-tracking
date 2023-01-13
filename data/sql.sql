@@ -74,7 +74,7 @@ CREATE TABLE `income`
 CREATE TABLE `month_plan`
 (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'primary key',
-    `start_date` DATE NOT NULL COMMENT 'Start date of the month planned actions',
+    `start_date` DATE NOT NULL UNIQUE COMMENT 'Start date of the month planned actions',
     `end_date` DATE NOT NULL COMMENT 'End date of the month planned actions',
     `goal` VARCHAR(512) NOT NULL COMMENT 'Goals of the month',
     `status` ENUM('INPROGRESS', 'SUCCESS', 'FAILED') NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `week_plan`
 (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'primary key',
     `month_id` INT UNSIGNED,
-    `start_date` DATE NOT NULL COMMENT 'Start date of the week planned actions',
+    `start_date` DATE NOT NULL UNIQUE COMMENT 'Start date of the week planned actions',
     `end_date` DATE NOT NULL COMMENT 'End date of the week planned actions',
     `goal` VARCHAR(512) NOT NULL COMMENT 'Goals of the week',
     `status` ENUM('INPROGRESS', 'SUCCESS', 'FAILED') NOT NULL COMMENT 'Status of goal achieving',

@@ -2,7 +2,7 @@
 
 from api.validations.month_planner_validation import MonthPlannerValidation
 from database.models.month_plan_model import MonthPlanModel
-from base.datetime_utils import to_db_date
+from base.datetime_utils import to_db_date, first_day_of_month_from_date
 from logger import logger
 
 class MonthPlanner():
@@ -29,8 +29,10 @@ class MonthPlanner():
             return True
 
 
-    def get_id(self):
+    def get_id(self, date: str):
         """ Get current month id
             :return int
         """
-        pass
+        start_date = to_db_date(first_day_of_month_from_date(date))
+
+        return self.model.get_id(start_date)

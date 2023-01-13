@@ -60,8 +60,9 @@ def application_menu() -> None:
 # Debugger for the cli system
 def debugger():
     import pool
-    
+    import datetime
+    start_date = datetime.datetime.now()
+    data = pool.week_planner_api.get_week_plans(start_date)
 
-    data = pool.spent_tracking_api.show_spent_tracking_data(1, 3)
-
-    print(data)
+    for i in data:
+        print(i)

@@ -80,9 +80,28 @@ def current_date():
     return today.strftime(fmt)
 
 
-def yesterday_date():
-    pass
+def yesterday_date(fmt:str = app_date_fmt):
+    now = datetime.now()
+    yesterday = (now - timedelta(1)).strftime(fmt)
+
+    return yesterday
 
 
-def add_date(date_str: date, count: int):
-    pass
+def add_date(date_str: date, count: int, fmt: str = app_date_fmt):
+    try:
+        date_sum = date_str + timedelta(count)
+        return date_sum.strftime(fmt)
+    except Exception as e:
+        logger.error(e)
+
+        return False
+
+
+def first_day_of_month_from_date(date_str:str, fmt: str = app_date_fmt) -> str:
+    try:
+        first_day = datetime.strptime(date_str, fmt).replace(day=1)
+    except ValueError as e:
+        logger.error(e)
+        return False
+
+    return first_day.strftime(app_date_fmt)

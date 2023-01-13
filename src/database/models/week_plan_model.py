@@ -31,4 +31,13 @@ class WeekPlanModel:
         values.append(created_at)
         values.append(updated_at)
 
-        return self.mysql_db.insert_value(WeekPlanModel.__table, columns, values)        
+        return self.mysql_db.insert_value(WeekPlanModel.__table, columns, values)
+
+
+    def get_data_with_month_id(self, id: int):
+        columns = [WeekPlanModel.__start_date, WeekPlanModel.__end_date, WeekPlanModel.__goal,
+                WeekPlanModel.__status]
+
+        statement = self.mysql_db.select_where(WeekPlanModel.__table, columns, WeekPlanModel.__month_id, id).create()
+
+        return self.mysql_db.execute_select_where(statement)

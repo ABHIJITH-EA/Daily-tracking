@@ -19,6 +19,8 @@ class PlannerWindow(QDialog):
         self.main_laout = QtWidgets.QVBoxLayout()
         self.setLayout(self.main_laout)
 
+        self.setModal(True)
+
         self.create_ui()
 
     

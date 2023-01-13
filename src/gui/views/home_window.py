@@ -4,12 +4,16 @@ from PyQt6.QtWidgets import QMainWindow
 from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
+from PyQt6.QtCharts import QPieSeries, QPieSlice, QChart, QChartView
 
 from gui import config, utils
 from logger import logger
 from gui.controllers.spent_tracking_controller import SpentTrackingController
 from gui.controllers.income_tracking_controller import IncomeTrackingController
 from gui.controllers.daily_tracking_controller import DailyTrackingController
+from gui.controllers.wakeup_time_backup_controller import WakeupTimeBackupController
+from gui.controllers.week_planner_controller import WeekPlannerController
+from gui.controllers.month_planner_controller import MonthPlannerController
 from gui.views.about_window import AboutWindow
 from gui.views.planner_window import PlannerWindow
 
@@ -37,7 +41,9 @@ class HomeWindow(QMainWindow):
         self.spent_tracking_controller = SpentTrackingController()
         self.income_tracking_controller = IncomeTrackingController()
         self.daily_tracking_controller = DailyTrackingController()
-
+        self.wakeup_time_backup_controller = WakeupTimeBackupController()
+        self.month_planner_controller = MonthPlannerController()
+        self.week_planner_controller = WeekPlannerController()
         self.tracking_date = QtCore.QDate()
 
         self.create_actions()
@@ -53,12 +59,21 @@ class HomeWindow(QMainWindow):
         save_icon = utils.get_icon_path('save_menu.png')
         about_icon = utils.get_icon_path('about_menu.png')
         planner_icon = utils.get_icon_path('planner_window.png')
+        import_icon = utils.get_icon_path('import_menu.png')
+        export_icon = utils.get_icon_path('export_menu.png')
+        log_icon = utils.get_icon_path('log_icon.png')
         
         self.exit_action = QtGui.QAction('Exit', self)
         self.exit_action.setIcon(QIcon(exit_icon))
         self.exit_action.setShortcut(QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Quit))
         self.exit_action.setWhatsThis('Exit app')
         self.exit_action.triggered.connect(self.close_app)
+
+        self.import_action = QtGui.QAction('Import', self)
+        self.import_action.setIcon(QIcon(import_icon))
+
+        self.export_action = QtGui.QAction('Export', self)
+        self.export_action.setIcon(QIcon(export_icon))
 
         self.about_action = QtGui.QAction('About', self)
         self.about_action.setIcon(QIcon(about_icon))
@@ -72,9 +87,16 @@ class HomeWindow(QMainWindow):
         self.backup_action = QtGui.QAction('Backup', self)
         self.backup_action.setIcon(QIcon(backup_icon))
 
+        self.wakeup_time_backup_action = QtGui.QAction('Wakeup time', self)
+        self.wakeup_time_backup_action.triggered.connect(self.open_wakeup_time_backup_window)
+
         self.planner_action = QtGui.QAction('Planner', self)
         self.planner_action.setIcon(QIcon(planner_icon))
         self.planner_action.triggered.connect(self.open_planner_window)
+
+        self.log_view_action = QtGui.QAction('Log', self)
+        self.log_view_action.setIcon(QIcon(log_icon))
+        self.log_view_action.triggered.connect(self.open_log_window)
 
 
     def create_toolbar(self):
@@ -95,14 +117,26 @@ class HomeWindow(QMainWindow):
         self.view_menu = QtWidgets.QMenu('View', self)
         self.help_menu = QtWidgets.QMenu('Help', self)
 
+        # Submenu
+        self.backup_menu = QtWidgets.QMenu('Backup')
+
 
         self.app_menubar.addMenu(self.file_menu)
         self.app_menubar.addMenu(self.edit_menu)
         self.app_menubar.addMenu(self.view_menu)
         self.app_menubar.addMenu(self.help_menu)
+        self.view_menu.addMenu(self.backup_menu)
 
+        self.backup_menu.addAction(self.wakeup_time_backup_action)
+
+        self.file_menu.addAction(self.import_action)
+        self.file_menu.addAction(self.export_action)
+        self.file_menu.addSeparator()
         self.file_menu.addAction(self.exit_action)
-        self.help_menu.addAction(self.about_action)      
+        self.help_menu.addAction(self.about_action)
+        self.view_menu.addAction(self.log_view_action) 
+
+        self.app_statusbar = self.statusBar()
 
 
     def create_ui(self):
@@ -157,20 +191,75 @@ class HomeWindow(QMainWindow):
         self.daily_tracking_input_box_layout.addRow(self.wakeup_time_label, self.wakeup_time_input)
         self.daily_tracking_input_box_layout.addRow(self.sleepy_time_label, self.sleepy_input_box)
 
-        self.daily_tracking_sub_box = QtWidgets.QFrame(self.daily_tracking_box)
-        self.daily_tracking_sub_box_layout = QtWidgets.QVBoxLayout(self.daily_tracking_sub_box)
-        self.current_day_wakeup_time_box = QtWidgets.QFrame(self.daily_tracking_sub_box)
-        self.current_day_wakeup_time_box_layout = QtWidgets.QFormLayout(self.current_day_wakeup_time_box)
-        self.current_day_wakeup_time_label = QtWidgets.QLabel('Latest wakeup time')
-        self.current_day_wakeup_time_input = QtWidgets.QLineEdit()
-        self.current_day_wakeup_time_box_layout.addRow(self.current_day_wakeup_time_label,
-                                                self.current_day_wakeup_time_input)
-        self.daily_tracking_sub_box_layout.addWidget(self.current_day_wakeup_time_box)
+        # self.daily_tracking_sub_box = QtWidgets.QFrame(self.daily_tracking_box)
+        # self.daily_tracking_sub_box_layout = QtWidgets.QVBoxLayout(self.daily_tracking_sub_box)
+        # self.current_day_wakeup_time_box = QtWidgets.QFrame(self.daily_tracking_sub_box)
+        # self.current_day_wakeup_time_box_layout = QtWidgets.QFormLayout(self.current_day_wakeup_time_box)
+        # self.current_day_wakeup_time_label = QtWidgets.QLabel('Latest wakeup time')
+        # self.current_day_wakeup_time_input = QtWidgets.QLineEdit()
+        # self.current_day_wakeup_time_box_layout.addRow(self.current_day_wakeup_time_label,
+        #                                         self.current_day_wakeup_time_input)
+        # self.daily_tracking_sub_box_layout.addWidget(self.current_day_wakeup_time_box)
+        self.plan_box = QtWidgets.QFrame(self.daily_tracking_box)
+        self.plan_box_layout = QtWidgets.QVBoxLayout(self.plan_box)
+        self.plan_box_title = QtWidgets.QLabel('Planner area')
+        self.plan_view_box = QtWidgets.QFrame(self.plan_box)
+        self.plan_box_view_box_layout = QtWidgets.QHBoxLayout(self.plan_view_box)
+        self.week_plan_box = QtWidgets.QFrame(self.plan_view_box)
+        self.week_plan_box_layout = QtWidgets.QVBoxLayout(self.week_plan_box)
+        self.week_plan_box_title = QtWidgets.QLabel('Week')
+        self.week_plan_view = QtWidgets.QTableWidget(self.week_plan_box)
+        self.week_plan_view.setColumnCount(5)
+        self.week_plan_view.setHorizontalHeaderLabels(['Week', 'Start date', 'End data', 'Objective', 'status'])
+        self.week_plan_view_header = self.week_plan_view.horizontalHeader()
+        self.update_week_plan_table()
+        # self.week_plan_view_header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        # self.week_plan_view.resizeColumnsToContents()
+
+        self.week_plan_status_box = QtWidgets.QFrame(self.week_plan_box)
+        self.week_plan_status_box_layout = QtWidgets.QHBoxLayout(self.week_plan_status_box)
+        # =====
+        # self.week_plan_progress_box = QChart()
+        # self.week_plan_progress_box.legend().hide()
+        # self.week_plan_progress_box.setBackgroundVisible(False)
+        # self.week_progrss = QPieSeries()
+        # self.week_progrss.setPieSize(1.0)
+        
+        # self.week_progrss.append('Pending', 1 - (1/4))
+        # self.week_progrss.append('Done', (1/4))
+        # self.week_progrss.setLabelsVisible(True)
+        # self.week_progrss.setLabelsPosition(QPieSlice.LabelPosition.LabelInsideTangential)
+
+        # self.week_plan_progress_box.setMinimumSize(200, 200)
+        # self.week_plan_progress_box.addSeries(self.week_progrss)
+        # self.week_plan_progress_view = QChartView(self.week_plan_progress_box)
+        # self.week_plan_progress_view.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+
+        # self.week_plan_status_box_layout.addWidget(self.week_plan_progress_view)
+        # ====
+        self.week_plan_box_layout.addWidget(self.week_plan_box_title)
+        self.week_plan_box_layout.addWidget(self.week_plan_view)
+        # self.week_plan_box_layout.addWidget(self.week_plan_status_box)
+
+        self.month_plan_box = QtWidgets.QFrame(self.plan_view_box)
+        self.month_plan_box_layout = QtWidgets.QVBoxLayout(self.month_plan_box)
+        self.month_plan_box_title = QtWidgets.QLabel('Month')
+        self.month_plan_view = QtWidgets.QTableWidget(self.plan_view_box)
+        self.month_plan_view.setColumnCount(4)
+        self.month_plan_view.setHorizontalHeaderLabels(['Start date', 'End data', 'Objective', 'status'])
+        self.month_plan_box_layout.addWidget(self.month_plan_box_title)
+        self.month_plan_box_layout.addWidget(self.month_plan_view)
+
+        self.plan_box_view_box_layout.addWidget(self.week_plan_box)
+        self.plan_box_view_box_layout.addWidget(self.month_plan_box)
+        self.plan_box_layout.addWidget(self.plan_box_title)
+        self.plan_box_layout.addWidget(self.plan_view_box)
 
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_box_title)
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_input_box)
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_button_box)
-        self.daily_tracking_box_layout.addWidget(self.daily_tracking_sub_box)
+        self.daily_tracking_box_layout.addWidget(self.plan_box)
+        # self.daily_tracking_box_layout.addWidget(self.daily_tracking_sub_box)
 
         # Daily tracking view
         self.daily_tracking_view_box = QtWidgets.QFrame(self.daily_tracking_frame)
@@ -385,4 +474,41 @@ class HomeWindow(QMainWindow):
     def open_planner_window(self):
         self.planner_window = PlannerWindow()
         self.planner_window.show()
-        
+
+    def open_wakeup_time_backup_window(self):
+        wakeup_time_box = QtWidgets.QInputDialog(self, Qt.WindowType.FramelessWindowHint)
+        wakeup_time_box.setLabelText('Wakeup time')
+        wakeup_time_box.setOkButtonText('Save')
+        wakeup_time_box.textValueSelected.connect(lambda: self.backup_wakeup_time(wakeup_time_box.textValue()))
+        target = self.rect()
+        target_x = target.center().x()
+        target_y = target.center().y()
+        wakeup_time_box.move(QtCore.QPoint(target_x, target_y))
+
+        wakeup_time_box.exec()
+
+
+    def backup_wakeup_time(self, time: str):
+        status = self.wakeup_time_backup_controller.save_wakeup_time(time)
+
+        if status:
+            self.app_statusbar.showMessage('Wakeup time backup successfull')
+        else:
+            self.app_statusbar.showMessage('Wakeup time backup unsuccessfull')
+
+
+    def open_log_window(self):
+        self.app_statusbar.showMessage('Logfile view open')
+
+
+    def update_week_plan_table(self):
+        month_plan_data = self.week_planner_controller.show_week_plans(QtCore.QDate.currentDate().toPyDate())
+        if month_plan_data:
+            for data in month_plan_data:
+                rows = self.week_plan_view.rowCount()
+                self.week_plan_view.setRowCount(rows + 1)
+                self.week_plan_view.setItem(rows, 0, QtWidgets.QTableWidgetItem(str(rows + 1)))
+                self.week_plan_view.setItem(rows, 1, QtWidgets.QTableWidgetItem(data[0]))
+                self.week_plan_view.setItem(rows, 2, QtWidgets.QTableWidgetItem(data[1]))
+                self.week_plan_view.setItem(rows, 3, QtWidgets.QTableWidgetItem(data[2]))
+                self.week_plan_view.setItem(rows, 4, QtWidgets.QTableWidgetItem(data[3]))        

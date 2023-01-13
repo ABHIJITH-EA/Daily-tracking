@@ -2,7 +2,6 @@
 
 import pool
 
-
 class MonthPlannerController:
 
     def __init__(self) -> None:
