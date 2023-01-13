@@ -11,6 +11,7 @@
 # General
 - Remove blank files from **resources** directory
 - Remove debugger from `cli core`
+- Review data/xxxchange.db may be it contains development data
 
 ### Development
 ---
@@ -21,4 +22,4 @@
 
 - CLI <img src="https://progress-bar.dev/60/" alt="drawing" style="width:60px;"/>
 
-- GUI <img src="https://progress-bar.dev/30/" alt="drawing" style="width:60px;"/>
+- GUI <img src="https://progress-bar.dev/45/" alt="drawing" style="width:60px;"/>
