@@ -1,6 +1,6 @@
 ## XXXChange
 \
-![](./docs/screenshots/xxxchange_20230111_221652.png)
+![](./docs/screenshots/xxxchange_20230120_181825.png)
 
 \
 [![python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)]()

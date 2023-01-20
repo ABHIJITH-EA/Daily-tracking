@@ -17,6 +17,7 @@ from gui.controllers.month_planner_controller import MonthPlannerController
 from gui.views.about_window import AboutWindow
 from gui.views.planner_window import PlannerWindow
 
+from gui.qmulti_select import CheckableComboBox
 
 class HomeWindow(QMainWindow):
 
@@ -174,6 +175,17 @@ class HomeWindow(QMainWindow):
         self.sleepy_date_input.setCalendarPopup(True)
         self.sleepy_input_box.addWidget(self.sleepy_time_input)
         self.sleepy_input_box.addWidget(self.sleepy_date_input)
+
+        self.running_start_label = QtWidgets.QLabel('Running start at')
+        self.running_start_input = QtWidgets.QLineEdit()
+        self.running_end_label = QtWidgets.QLabel('Running end at')
+        self.running_end_input = QtWidgets.QLineEdit()
+
+        self.habit_tracking_label = QtWidgets.QLabel('Habit tracking')
+        self.habit_tracking_input = CheckableComboBox()
+        habit_items = ['MSN', 'DRNK', 'SMK', 'OTH']
+        self.habit_tracking_input.addItems(habit_items)
+        
         self.daily_tracking_button_box = QtWidgets.QFrame(self.daily_tracking_input_box)
         self.daily_tracking_button_box.setObjectName('daily-tracking-button-box')
         self.daily_tracking_button_box_layout = QtWidgets.QHBoxLayout(self.daily_tracking_button_box)
@@ -190,16 +202,10 @@ class HomeWindow(QMainWindow):
                                                 self.daily_tracking_date_picker)
         self.daily_tracking_input_box_layout.addRow(self.wakeup_time_label, self.wakeup_time_input)
         self.daily_tracking_input_box_layout.addRow(self.sleepy_time_label, self.sleepy_input_box)
+        self.daily_tracking_input_box_layout.addRow(self.running_start_label, self.running_start_input)
+        self.daily_tracking_input_box_layout.addRow(self.running_end_label, self.running_end_input)
+        self.daily_tracking_input_box_layout.addRow(self.habit_tracking_label, self.habit_tracking_input)
 
-        # self.daily_tracking_sub_box = QtWidgets.QFrame(self.daily_tracking_box)
-        # self.daily_tracking_sub_box_layout = QtWidgets.QVBoxLayout(self.daily_tracking_sub_box)
-        # self.current_day_wakeup_time_box = QtWidgets.QFrame(self.daily_tracking_sub_box)
-        # self.current_day_wakeup_time_box_layout = QtWidgets.QFormLayout(self.current_day_wakeup_time_box)
-        # self.current_day_wakeup_time_label = QtWidgets.QLabel('Latest wakeup time')
-        # self.current_day_wakeup_time_input = QtWidgets.QLineEdit()
-        # self.current_day_wakeup_time_box_layout.addRow(self.current_day_wakeup_time_label,
-        #                                         self.current_day_wakeup_time_input)
-        # self.daily_tracking_sub_box_layout.addWidget(self.current_day_wakeup_time_box)
         self.plan_box = QtWidgets.QFrame(self.daily_tracking_box)
         self.plan_box_layout = QtWidgets.QVBoxLayout(self.plan_box)
         self.plan_box_title = QtWidgets.QLabel('Planner area')
@@ -213,33 +219,11 @@ class HomeWindow(QMainWindow):
         self.week_plan_view.setHorizontalHeaderLabels(['Week', 'Start date', 'End data', 'Objective', 'status'])
         self.week_plan_view_header = self.week_plan_view.horizontalHeader()
         self.update_week_plan_table()
-        # self.week_plan_view_header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
-        # self.week_plan_view.resizeColumnsToContents()
 
         self.week_plan_status_box = QtWidgets.QFrame(self.week_plan_box)
         self.week_plan_status_box_layout = QtWidgets.QHBoxLayout(self.week_plan_status_box)
-        # =====
-        # self.week_plan_progress_box = QChart()
-        # self.week_plan_progress_box.legend().hide()
-        # self.week_plan_progress_box.setBackgroundVisible(False)
-        # self.week_progrss = QPieSeries()
-        # self.week_progrss.setPieSize(1.0)
-        
-        # self.week_progrss.append('Pending', 1 - (1/4))
-        # self.week_progrss.append('Done', (1/4))
-        # self.week_progrss.setLabelsVisible(True)
-        # self.week_progrss.setLabelsPosition(QPieSlice.LabelPosition.LabelInsideTangential)
-
-        # self.week_plan_progress_box.setMinimumSize(200, 200)
-        # self.week_plan_progress_box.addSeries(self.week_progrss)
-        # self.week_plan_progress_view = QChartView(self.week_plan_progress_box)
-        # self.week_plan_progress_view.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-
-        # self.week_plan_status_box_layout.addWidget(self.week_plan_progress_view)
-        # ====
         self.week_plan_box_layout.addWidget(self.week_plan_box_title)
         self.week_plan_box_layout.addWidget(self.week_plan_view)
-        # self.week_plan_box_layout.addWidget(self.week_plan_status_box)
 
         self.month_plan_box = QtWidgets.QFrame(self.plan_view_box)
         self.month_plan_box_layout = QtWidgets.QVBoxLayout(self.month_plan_box)
@@ -259,7 +243,6 @@ class HomeWindow(QMainWindow):
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_input_box)
         self.daily_tracking_box_layout.addWidget(self.daily_tracking_button_box)
         self.daily_tracking_box_layout.addWidget(self.plan_box)
-        # self.daily_tracking_box_layout.addWidget(self.daily_tracking_sub_box)
 
         # Daily tracking view
         self.daily_tracking_view_box = QtWidgets.QFrame(self.daily_tracking_frame)

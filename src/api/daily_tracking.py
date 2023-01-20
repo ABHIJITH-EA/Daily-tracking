@@ -36,8 +36,14 @@ class DailyTracking:
         # sleepy_time = to_db_time(data[2], fmt)
         sleepy_time = to_db_datetime(data[2])
         day = to_db_date(data[0])
+        running_start = data[3]
+        running_end = data[4]
+        mstn_status = data[5]
+        drnk_status = data[6]
+        smk_status = data[7]
 
-        values = [day, wakeup_time, sleepy_time, created_at, updated_at]
+        values = [day, wakeup_time, sleepy_time, running_start, running_end,
+                mstn_status, drnk_status, smk_status, created_at, updated_at]
         result = self.mysql_db.insert_value(table=DailyTracking.table,
                                             columns=columns, values=values)
 

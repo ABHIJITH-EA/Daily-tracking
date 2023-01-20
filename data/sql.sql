@@ -1,6 +1,6 @@
-CREATE DATABASE `XXXChange`;
+CREATE DATABASE `xxxchange_test`;
 
-USE `XXXChange`;
+USE `xxxchange_test`;
 
 -- Table to track daily activiy
 -- may be future modifications will be
@@ -11,6 +11,11 @@ CREATE TABLE `daily_tracking`
     `day` DATE NOT NULL UNIQUE COMMENT 'Date',
     `wakeup_time` TIME NOT NULL COMMENT 'The time got up in the morning',
     `sleepy_time` DATETIME NOT NULL COMMENT 'The time went to sleep',
+    `running_start` TIME NOT NULL COMMENT 'The time went to running',
+    `running_end` TIME NOT NULL COMMENT 'The time stoped running for the day',
+    `mstn_status` TINYINT NOT NULL COMMENT '',
+    `drnk_status` TINYINT NOT NULL COMMENT '',
+    `smk_status` TINYINT NOT NULL COMMENT '',
     `created_at` DATETIME NOT NULL,
     `created_by` VARCHAR(45) DEFAULT 'system',
     `updated_at` DATETIME NOT NULL,
@@ -95,7 +100,7 @@ CREATE TABLE `week_plan`
     `start_date` DATE NOT NULL UNIQUE COMMENT 'Start date of the week planned actions',
     `end_date` DATE NOT NULL COMMENT 'End date of the week planned actions',
     `goal` VARCHAR(512) NOT NULL COMMENT 'Goals of the week',
-    `status` ENUM('INPROGRESS', 'SUCCESS', 'FAILED') NOT NULL COMMENT 'Status of goal achieving',
+    `status` ENUM('INPROGRESS', 'SUCCESS', 'FAILED') NOT NULL COMMENT 'status of goal achieving',
     `created_at` DATETIME NOT NULL,
     `created_by` VARCHAR(45) DEFAULT 'system',
     `updated_at` DATETIME NOT NULL,
@@ -105,3 +110,6 @@ CREATE TABLE `week_plan`
     PRIMARY KEY (`id`),
     FOREIGN KEY (`month_id`) REFERENCES `month_plan`(`id`)
 );
+
+-- Base table for daily tracking activities
+-- Whi
