@@ -1,4 +1,4 @@
-""" Mysql connection class"""
+""" Mysql driver"""
 
 import sys
 import mysql.connector
@@ -78,7 +78,7 @@ class MysqlDb(object):
     def select(self, table:str, columns: list, limit:int = None):
         columns = ','.join(columns)
         statement = f"SELECT {columns} FROM {table};"
-        
+
         # Checking default limit changed or not
         limit = self.limit if limit is None else limit
         if not self.execute(statement):
@@ -103,7 +103,7 @@ class MysqlDb(object):
         return self.cursor.fetchmany(limit)
 
 
-    # TODO: multi-value insertation
+    # TODO: multi-value insertion
     # TODO: Review code
     def insert_value(self, table: str, columns: list, values: list) -> None:
         columns = ','.join(columns)
@@ -143,7 +143,7 @@ class MysqlDb(object):
             logger.error(e)
             return False
 
-    
+
     # BUG: Not accounting for the `execute` failure scenario
     def first_row(self):
         return self.cursor.fetchone()

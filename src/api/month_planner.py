@@ -6,7 +6,7 @@ from base.datetime_utils import to_db_date, first_day_of_month_from_date
 from logger import logger
 
 class MonthPlanner():
-    
+
     def __init__(self) -> None:
         self.validation = MonthPlannerValidation()
         self.model = MonthPlanModel()

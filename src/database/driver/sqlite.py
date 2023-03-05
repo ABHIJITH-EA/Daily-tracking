@@ -9,7 +9,7 @@ from base.constants import General
 
 
 class SqliteDb(object):
-    
+
     # TODO: Add in memory DB support
     def __init__(self):
         try:
@@ -38,8 +38,6 @@ class SqliteDb(object):
         if get:
             ouput = self.cursor.fetchall()
             return ouput
-
-        
 
 
     def execute_script(self, source: list):

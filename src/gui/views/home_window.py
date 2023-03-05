@@ -1,5 +1,5 @@
 """ """
-
+import calendar
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtGui import QIcon
@@ -18,6 +18,7 @@ from gui.views.about_window import AboutWindow
 from gui.views.planner_window import PlannerWindow
 
 from gui.qmulti_select import CheckableComboBox
+from base.datetime_utils import current_month_index
 
 class HomeWindow(QMainWindow):
 
@@ -63,7 +64,7 @@ class HomeWindow(QMainWindow):
         import_icon = utils.get_icon_path('import_menu.png')
         export_icon = utils.get_icon_path('export_menu.png')
         log_icon = utils.get_icon_path('log_icon.png')
-        
+
         self.exit_action = QtGui.QAction('Exit', self)
         self.exit_action.setIcon(QIcon(exit_icon))
         self.exit_action.setShortcut(QtGui.QKeySequence(QtGui.QKeySequence.StandardKey.Quit))
@@ -135,7 +136,7 @@ class HomeWindow(QMainWindow):
         self.file_menu.addSeparator()
         self.file_menu.addAction(self.exit_action)
         self.help_menu.addAction(self.about_action)
-        self.view_menu.addAction(self.log_view_action) 
+        self.view_menu.addAction(self.log_view_action)
 
         self.app_statusbar = self.statusBar()
 
@@ -185,7 +186,7 @@ class HomeWindow(QMainWindow):
         self.habit_tracking_input = CheckableComboBox()
         habit_items = ['MSN', 'DRNK', 'SMK', 'OTH']
         self.habit_tracking_input.addItems(habit_items)
-        
+
         self.daily_tracking_button_box = QtWidgets.QFrame(self.daily_tracking_input_box)
         self.daily_tracking_button_box.setObjectName('daily-tracking-button-box')
         self.daily_tracking_button_box_layout = QtWidgets.QHBoxLayout(self.daily_tracking_button_box)
@@ -266,7 +267,7 @@ class HomeWindow(QMainWindow):
         self.daily_tracking_view_table.resizeColumnsToContents()
         self.daily_tracking_view_box_layout.addWidget(self.daily_tracking_view_box_title)
         self.daily_tracking_view_box_layout.addWidget(self.daily_tracking_view_table)
-        
+
         self.daily_tracking_frame_layout.addWidget(self.daily_tracking_box)
         self.daily_tracking_frame_layout.addWidget(self.daily_tracking_view_box)
 
@@ -329,6 +330,8 @@ class HomeWindow(QMainWindow):
         self.spent_tracking_view_box_month_filter_label = QtWidgets.QLabel('Month')
         self.spent_tracking_view_box_month_filter_label.setObjectName('spent-tracking-view--box-month-filter-label')
         self.spent_tracking_view_box_month_filter_input = QtWidgets.QComboBox(self.spent_tracking_view_box_filter_box)
+        self.spent_tracking_view_box_month_filter_input.addItems(calendar.month_name[0:])
+        self.spent_tracking_view_box_month_filter_input.setCurrentIndex(current_month_index())
         self.spent_tracking_view_box_month_filter_input.setObjectName('spent-tracking-view-box-month-filter-input')
         self.spent_tracking_view_box_year_filter_label = QtWidgets.QLabel('Year')
         self.spent_tracking_view_box_year_filter_label.setObjectName('spent-tracking-view--box-year-filter-label')
@@ -453,7 +456,7 @@ class HomeWindow(QMainWindow):
         self.about_window = AboutWindow()
         self.about_window.show()
 
-    
+
     def open_planner_window(self):
         self.planner_window = PlannerWindow()
         self.planner_window.show()
@@ -494,4 +497,4 @@ class HomeWindow(QMainWindow):
                 self.week_plan_view.setItem(rows, 1, QtWidgets.QTableWidgetItem(data[0]))
                 self.week_plan_view.setItem(rows, 2, QtWidgets.QTableWidgetItem(data[1]))
                 self.week_plan_view.setItem(rows, 3, QtWidgets.QTableWidgetItem(data[2]))
-                self.week_plan_view.setItem(rows, 4, QtWidgets.QTableWidgetItem(data[3]))        
+                self.week_plan_view.setItem(rows, 4, QtWidgets.QTableWidgetItem(data[3]))
